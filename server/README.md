@@ -1,5 +1,5 @@
 ### install package
 npm i
-### Star react js
+### Star express
 npm start
 
