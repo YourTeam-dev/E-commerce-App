@@ -21,6 +21,8 @@ require('./model')
 // app.use('api/',require('./router/comment.router'))
 
 
+app.use('/api/category/',require('./router/category.router'))
+app.use('/api/product/',require('./router/fetchProduct.router'))
 
 
 
