@@ -19,7 +19,7 @@ export const getFiltredProduct = async (data) => {
 export const getProductByCategory = async (id) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/product/getProductByCategory/${id}`
+      `${baseUrl}product/getProductByCategory/${id}`
     );
     return response.data;
   } catch (error) {

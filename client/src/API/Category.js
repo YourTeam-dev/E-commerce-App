@@ -6,7 +6,7 @@ const headers = {
 }
 export const getAllCategories = async () => {
     try {
-        const response = await axios.get( `${baseUrl}/category/getAllCategories`);
+        const response = await axios.get( `${baseUrl}category/getAllCategories`);
         return response.data;
     } catch (error) {
         console.error("Error fetching categories:", error);

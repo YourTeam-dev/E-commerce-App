@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { getAllCategories } from "../../API/Category";
+import { useNavigate } from 'react-router-dom';
+
 const NavBar = () => {
+  const navigate = useNavigate();
+  const [categories, setCatergories] = useState("");
+  useEffect(() => {
+    getAllCategories().then((res) => setCatergories(res));
+  }, []);
   const [showCategory, setShowCategory] = useState(false);
   return (
-    <div className="sticky top-0 z-50">
+    <div className="sticky top-0 z-50 mb-4 ">
+
       <nav className="bg-white shadow-md py-3 px-6 flex items-center justify-between">
         <div className="text-2xl font-bold text-[#d58a94]">9achech</div>
 
@@ -41,6 +50,25 @@ const NavBar = () => {
         </div>
       </nav>
 
+      {showCategory && (
+        <div className="absolute top-[105%] left-0 w-full bg-white shadow-md py-1 border-t border-gray-200 px-6 flex items-center justify-between">
+          <div className="flex-grow px-6">
+            <ul className="flex flex-wrap">
+              {categories.map((category) => (
+                <li key={category.id} className="text-center w-1/6  hover:border-l hover:border-r border-[#d58a94]">
+                  <a
+                    onClick={() =>{setShowCategory(false); navigate(`/liste-prodcuts/`, { state: { category: category._id } })}}
+                    className="text-gray-700 hover:text-[#d58a94] transition"
+                  >
+                    {category.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };

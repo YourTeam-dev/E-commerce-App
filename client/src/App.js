@@ -10,14 +10,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {!token && <Route path="/" element={<Navigate to="/signup" replace />} />}
+        {/* {!token && <Route path="/" element={<Navigate to="/signup" replace />} />}
         {!token && <Route path="/signup" element={<Signup setToken={setToken} />} />}
         {!token && <Route path="/login" element={<Login setToken={setToken} />} />}
         {token && <Route path="/" element={<Home />} />}
-        {/* Add other routes here */}
+        Add other routes here */}
 
-        {/* <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<Auth />} />
+        <Route path="/*" element={<Home />} />
+        {/* <Route path="/auth" element={<Auth />} />
         <Route path="/auth" element={<Auth />} /> */}
 
         {/* <Route path="*" element={<NotFound />} />  */}
