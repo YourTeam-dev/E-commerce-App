@@ -24,7 +24,7 @@ require('./model')
 app.use('/api/category/',require('./router/category.router'))
 app.use('/api/product/',require('./router/fetchProduct.router'))
 
-
+app.use('/api/Order',require('./router/order.router'))
 
 
 

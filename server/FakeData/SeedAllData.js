@@ -133,18 +133,26 @@ async function seed() {
     for (let i = 0; i < 10; i++) {
       const orderedProducts = faker.helpers.arrayElements(
         products,
-        faker.number.int({ min: 1, max: 5 })
-      );
-      const totalPrice = orderedProducts.reduce(
-        (acc, p) => acc + (p.price || 0),
-        0
+        faker.number.int({ min: 1, max: 5 }) 
       );
 
+      const listeProduct = orderedProducts.map((p) => ({
+        productId: p._id,
+        quantity: faker.number.int({ min: 1, max: 5 }),
+      }));
+
+      const totalPrice = listeProduct.reduce((acc, item) => {
+        const product = products.find((p) => p._id.equals(item.productId));
+        return acc + (product?.price || 0) * item.quantity;
+      }, 0);
+
       const order = new Order({
-        listeProduct: orderedProducts.map((p) => p._id),
+        userId: faker.helpers.arrayElement(users)._id, // assuming you have a `users` array
+        listeProduct,
         totalPrice: Number(totalPrice.toFixed(2)),
         aproveIt: faker.datatype.boolean(),
       });
+
       await order.save();
     }
 
