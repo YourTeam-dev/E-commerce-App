@@ -1,4 +1,11 @@
 const Category = require("../model/Category.model");
+
+
+
+
+
+
+
 const createCategory = async (req, res) => {
   try {
     if (!req.body.title)
@@ -74,11 +81,19 @@ const getCategoryPath = async (req, res) => {
     res.status(400).json({ error: error });
   }
 };
-
+const getFeaturedCategories = async (req, res) => {
+  try {
+    const categories = await Category.find({ parentId: null }).limit(4);
+    res.status(200).json(categories);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+};
 module.exports = {
   createCategory,
   updateCategory,
   deleteCategory,
   getAllCategories,
   getCategoryPath,
+  getFeaturedCategories
 };

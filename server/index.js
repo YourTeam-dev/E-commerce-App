@@ -12,15 +12,20 @@ dotenv.config();
 const port = process.env.PORT
 require('./model')
 
+// Import user router
+const userRouter = require('./router/user.router');
 
 
 
 // Routes import
 
 
+// Use user router
+app.use('/api/users', userRouter);
 
 app.use('/api/category/',require('./router/category.router'))
 app.use('/api/product/',require('./router/fetchProduct.router'))
+app.use('/api/hero/',require('./router/hero.router'))
 
 app.use("/api/products", require("./router/GetOneProduct.router"));
 app.use("/api/comments", require("./router/comment.routerS"));

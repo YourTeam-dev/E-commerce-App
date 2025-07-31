@@ -5,6 +5,7 @@ const productSchema = new mongoose.Schema(
     sellerId: { type: mongoose.Schema.Types.ObjectId, ref: "Seller" },
     commentId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     reviewId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+
     categoryId : [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
 
     title: { type: String },
@@ -15,7 +16,9 @@ const productSchema = new mongoose.Schema(
     price: { type: Number, default: null },
     promo: { type: Number, default: null },
     quantity: { type: Number, default: null },
+
     rating: { type: Number, default: 0 }
+
   },
   {
     timestamps: true,
@@ -23,3 +26,7 @@ const productSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Product", productSchema);
+
+
+
+
