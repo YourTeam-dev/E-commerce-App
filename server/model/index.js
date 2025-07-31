@@ -20,5 +20,5 @@ mongoose.connect(process.env.MONGO_URI)
     Seller:require("./seller.model"),
 
     Order:require("./Order.model"),
-
+    Hero:require("./Hero.model")
   }
