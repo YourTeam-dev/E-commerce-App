@@ -15,15 +15,16 @@ require('./model')
 
 
 
-
 // Routes import
 
-// app.use('api/',require('./router/comment.router'))
 
 
 app.use('/api/category/',require('./router/category.router'))
 app.use('/api/product/',require('./router/fetchProduct.router'))
 
+app.use("/api/products", require("./router/GetOneProduct.router"));
+app.use("/api/comments", require("./router/comment.routerS"));
+app.use("/api/reviews", require("./router/Review.router"));
 
 
 
