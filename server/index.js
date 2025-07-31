@@ -17,12 +17,19 @@ const userRouter = require('./router/user.router');
 
 
 
+
 // Routes import
 
 // app.use('api/',require('./router/comment.router'))
 
 // Use user router
 app.use('/api/users', userRouter);
+
+app.use('/api/category/',require('./router/category.router'))
+app.use('/api/product/',require('./router/fetchProduct.router'))
+
+
+
 
 
 
