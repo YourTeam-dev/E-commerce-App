@@ -1,9 +1,18 @@
+import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import SellerPage from './pages/SellerPage';
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
 import Home from './pages/Home';
+<<<<<<< HEAD
 import Comment from './components/productDetail/Comment';
+=======
+import Cart from './components/AddtoCard/Cart'
+
+
+>>>>>>> 14d56c4124a952d0317cadaef39efbfd99fbf999
 
 function App() {
   const [token, setToken] = useState(null);
@@ -14,6 +23,7 @@ function App() {
         {/* Uncomment or add more routes as needed */}
         {/* {!token && <Route path="/" element={<Navigate to="/signup" replace />} />}
         {token && <Route path="/" element={<Home />} />}
+        <Route path="/cart" element={<Cart />} />
         {/* Add other routes here */}
 
         {/* {!token && <Route path="/signup" element={<Signup setToken={setToken} />} />}
@@ -22,11 +32,15 @@ function App() {
         {/* <Route path="/auth" element={<Auth />} />  */}
         {/* <Route path="/products/:productId" element={<ProductDetail />} />
 
+<<<<<<< HEAD
         {/* For now, just show ProductDetail at root */}
        {/* <Route path="/" element={<Comment />} /> */}
 
         {/* Optional: catch all unmatched routes */}
         {/* <Route path="*" element={<NotFound />} /> */}
+=======
+        { <Route path="/" element={<SellerPage />} />  }
+>>>>>>> 14d56c4124a952d0317cadaef39efbfd99fbf999
       </Routes>
     </BrowserRouter>
   );
