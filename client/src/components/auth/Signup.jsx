@@ -27,13 +27,13 @@ const Signup = ({ setToken }) => {
         email,
         password,
       });
-      setToken(data.token); // store token in App state
+      setToken(data.token);
       setSuccess('Signup successful! Please login.');
       setName('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-      navigate('/login'); // navigate to login page after signup
+      navigate('/login'); 
     } catch (err) {
       setError(err.response && err.response.data.message ? err.response.data.message : err.message);
     }
@@ -93,7 +93,7 @@ const Signup = ({ setToken }) => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-[#d58a94] text-white py-2 rounded hover:bg-[#d58a94]/80 transition"
         >
           Sign Up
         </button>

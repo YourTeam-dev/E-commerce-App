@@ -28,7 +28,7 @@ app.use('/api/product/',require('./router/fetchProduct.router'))
 app.use('/api/hero/',require('./router/hero.router'))
 
 app.use("/api/products", require("./router/GetOneProduct.router"));
-app.use("/api/comments", require("./router/comment.routerS"));
+app.use("/api/comments", require("./router/comment.router"));
 app.use("/api/reviews", require("./router/Review.router"));
 
 

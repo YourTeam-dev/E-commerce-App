@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getCommentsByProductId } from '../../API/handleComment';
+import { getCommentsByProductId } from '../../API/HandleProductDetail';
 
 const Comment = ({ productId }) => {
   const [comments, setComments] = useState([]);
