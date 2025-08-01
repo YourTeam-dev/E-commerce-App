@@ -15,6 +15,12 @@ function App() {
         {!token && <Route path="/login" element={<Login setToken={setToken} />} />}
         {token && <Route path="/" element={<Home />} />}
         {/* Add other routes here */}
+
+        {/* <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/auth" element={<Auth />} /> */}
+
+        {/* <Route path="*" element={<NotFound />} />  */}
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState('');
@@ -64,6 +64,12 @@ const Login = ({ setToken }) => {
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
+      <p className="mt-4 text-center">
+        Don't have an account?{' '}
+        <Link to="/signup" className="text-blue-600 hover:underline">
+          Signup here
+        </Link>
+      </p>
     </div>
   );
 };
