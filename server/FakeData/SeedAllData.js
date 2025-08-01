@@ -156,7 +156,7 @@ async function seed() {
 
       const order = new Order({
         userId: faker.helpers.arrayElement(users)._id, // assuming you have a `users` array
-        listeProduct,
+        listeProduct:faker.helpers.arrayElements(orderedProducts, faker.number.int({ min: 1, max: 5 })),
         totalPrice: Number(totalPrice.toFixed(2)),
         aproveIt: faker.datatype.boolean(),
       });
