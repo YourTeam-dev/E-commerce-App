@@ -1,6 +1,5 @@
 import react,{useEffect , useState } from 'react'
 import axios from 'axios'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import ProductItem from './ProductItem'
 export default function ProductListWithQuantity(){
     const [products,setProducts] = useState([])
