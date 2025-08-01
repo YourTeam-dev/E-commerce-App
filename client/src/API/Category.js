@@ -13,6 +13,7 @@ export const getAllCategories = async () => {
         return [];
     }
 };
+
 export const getCategoryPath = async (id) => {
     try {
         const response = await axios.get(`${baseUrl}/category/getCategoryPath/${id}`);
