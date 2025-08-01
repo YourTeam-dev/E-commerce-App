@@ -5,10 +5,14 @@ import ProductItem from './ProductItem'
 export default function ProductListWithQuantity(){
     const [products,setProducts] = useState([])
     const [card,setCard] = useState({})
-    useEffect(()=>{
-        axios.get('/api/products')
+    
+    const fetchData =async ()=>{
+      const res = await   axios.get('/api/products')
         .then(res=> setProducts(res.data))
         .catch(err => console.error("failed to load products",err))
+    }
+    useEffect(()=>{
+       fetchData()
     },[])
     const handleQuantityChange = (productId , quantity)=>{
         setCard(prev => ({...prev,[productId]: parseInt(quantity)}))
@@ -19,8 +23,12 @@ export default function ProductListWithQuantity(){
             productId,
             quantity
         }))
-        axios.post('api/orders',{
-            userId : "64e123abc123...",
+    if (orderItems.length === 0) {
+      alert("Please select quantity for at least one product")
+      return
+    }
+        axios.post('/api/orders',{
+            userId : "64e123abc123",
             listeProduct : orderItems
         })
         .then(()=> alert("Order placed!"))
@@ -30,7 +38,7 @@ export default function ProductListWithQuantity(){
         })
     }
     return(
-        <div className="container mt-4" style ={{backgroudColor : '#d58a94', padding :"20px",borderRadius : '10px'}}>
+        <div className="container mt-4" style ={{backgroundColor : '#d58a94', padding :"20px",borderRadius : '10px'}}>
         <h3 className='text-white'> Products </h3>
        {products.map(product=>(
         <ProductItem key = {product._id} product={product} quantityChange={handleQuantityChange}/>

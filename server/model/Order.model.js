@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema(
     }
   ],
     totalPrice: { type: Number, require:true },
-    aproveIt:{ type: Boolean, defaul:false },
+    aproveIt:{ type: Boolean, default:false },
   },
   {
     timestamps: true,
