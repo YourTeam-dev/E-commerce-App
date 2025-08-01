@@ -17,8 +17,8 @@ const userRouter = require('./router/user.router');
 
 
 
-
 // Routes import
+
 app.use("/api/sellerproduct/",require('./router/sellerProductRoutes'))
 // app.use('api/',require('./router/comment.router'))
 
@@ -27,6 +27,12 @@ app.use('/api/users', userRouter);
 
 app.use('/api/category/',require('./router/category.router'))
 app.use('/api/product/',require('./router/fetchProduct.router'))
+app.use('/api/hero/',require('./router/hero.router'))
+
+app.use("/api/products", require("./router/GetOneProduct.router"));
+app.use("/api/comments", require("./router/comment.router"));
+app.use("/api/reviews", require("./router/Review.router"));
+
 
 app.use('/api/Order',require('./router/order.router'))
 

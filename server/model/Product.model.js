@@ -18,6 +18,7 @@ const productSchema = new mongoose.Schema(
     quantity: { type: Number, default: null },
 
     rating: { type: Number, default: 0 }
+
   },
   {
     timestamps: true,
@@ -25,3 +26,7 @@ const productSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Product", productSchema);
+
+
+
+
