@@ -147,15 +147,7 @@ async function seed() {
         faker.number.int({ min: 1, max: 5 })
       );
 
-      const listeProduct = orderedProducts.map((p) => ({
-        productId: p._id,
-        quantity: faker.number.int({ min: 1, max: 5 }),
-      }));
-
-      const totalPrice = listeProduct.reduce((acc, item) => {
-        const product = products.find((p) => p._id.equals(item.productId));
-        return acc + (product?.price || 0) * item.quantity;
-      }, 0);
+      
 
      
       

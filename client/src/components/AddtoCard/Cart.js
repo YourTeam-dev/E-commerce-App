@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Cart.css'
+
 import ProductItem from './ProductItem'
 
 export default function ProductListWithQuantity() {
