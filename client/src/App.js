@@ -1,3 +1,6 @@
+import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import SellerPage from './pages/SellerPage';
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Signup from './components/auth/Signup';
@@ -24,7 +27,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/auth" element={<Auth />} /> */}
 
-        {/* <Route path="*" element={<NotFound />} />  */}
+        { <Route path="/" element={<SellerPage />} />  }
       </Routes>
     </BrowserRouter>
   );

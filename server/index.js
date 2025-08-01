@@ -19,7 +19,7 @@ const userRouter = require('./router/user.router');
 
 
 // Routes import
-
+app.use("/api/sellerproduct/",require('./router/sellerProductRoutes'))
 // app.use('api/',require('./router/comment.router'))
 
 // Use user router
