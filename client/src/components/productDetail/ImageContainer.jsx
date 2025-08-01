@@ -1,72 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from "react";
 
-const ImageContainer = () => {
-    
+const ImageContainer = ({ images }) => {
+  const [current, setCurrent] = useState(0);
+
+  const nextSlide = () => setCurrent((current + 1) % images.length);
+  const prevSlide = () =>
+    setCurrent((current - 1 + images.length) % images.length);
+
   return (
-    <div style={{ 
-      width: '50%', 
-      padding: '20px', 
-      background: '#f9f9f9', 
-      borderRadius: '10px', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center' ,
-      boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
-      marginBottom: '220px',
-      marginTop: '40px',
-      marginLeft: '40px'
-    }}>
-      <div style={{ 
-        position: 'relative', 
-        width: '100%', 
-        maxWidth: '600px' 
-      }}>
-        <button style={{ 
-          position: 'absolute', 
-          left: '10px', 
-          top: '50%', 
-          transform: 'translateY(-50%)', 
-          border: 'none', 
-          background: 'rgba(0, 0, 0, 0.5)', 
-          color: 'white', 
-          borderRadius: '50%', 
-          width: '30px', 
-          height: '30px', 
-          cursor: 'pointer' 
-        }}>‹</button>
-        <div style={{ 
-          background: '#6a87c7', 
-          height: '400px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          color: 'white', 
-          fontSize: '24px', 
-          borderRadius: '10px' 
-        }}>
-          Product Image 1
-        </div>
-        <button style={{ 
-          position: 'absolute', 
-          right: '10px', 
-          top: '50%', 
-          transform: 'translateY(-50%)', 
-          border: 'none', 
-          background: 'rgba(0, 0, 0, 0.5)', 
-          color: 'white', 
-          borderRadius: '50%', 
-          width: '30px', 
-          height: '30px', 
-          cursor: 'pointer' 
-        }}>›</button>
+    <div className="w-full p-5 bg-[#f9f9f9] rounded-[10px] flex flex-col items-center shadow-[0_0_10px_rgba(0,0,0,0.2)] mb-[220px]">
+      <div className="relative w-full max-w-[1000px] h-[400px] overflow-hidden rounded-[10px]">
+        {images.map((img, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              index === current ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          >
+            <img
+              src={img}
+              alt={`Product ${index}`}
+              className="w-full h-full object-cover rounded-[10px]"
+            />
+          </div>
+        ))}
+
+        <button
+          onClick={prevSlide}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-white text-3xl font-bold bg-black/50 w-[30px] h-[30px] rounded-full flex items-center justify-center z-20"
+        >
+          ‹
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-white text-3xl font-bold bg-black/50 w-[30px] h-[30px] rounded-full flex items-center justify-center z-20"
+        >
+          ›
+        </button>
       </div>
-      <div style={{ 
-        marginTop: '20px', 
-        width: '100px', 
-        height: '100px', 
-        border: '2px solid #000', 
-        borderRadius: '5px' 
-      }}></div>
+
+      <div className="mt-5 flex gap-4">
+        {images.map((img, index) => (
+          <img
+            key={index}
+            src={img}
+            alt={`Thumbnail ${index}`}
+            onClick={() => setCurrent(index)}
+            className={`w-[80px] h-[80px] object-cover rounded-md cursor-pointer border-2 transition-opacity duration-300 ${
+              index === current
+                ? "border-black opacity-100"
+                : "border-transparent opacity-40"
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

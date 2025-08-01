@@ -1,21 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const {isClient} = require("../midllwear")
 
 const {
-  addReview,
   updateReview,
 } = require("../controller/Review.controller");
+const { isAuth } = require("../midllwear");
 
 
-
-// Add a review
-router.post("/add", isClient, addReview);
-
-// Get reviews for a product
-
-// Update a review by review ID
-router.put("/update/:id", isClient, updateReview);
+router.put("/:id", updateReview);
 
 
 module.exports = router;

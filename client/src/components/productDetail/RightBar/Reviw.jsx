@@ -1,13 +1,17 @@
 import React, { useState } from "react";
+import { updateReviewCount } from "../../../API/HandleProductDetail";
 
-const Review = ({ defaultRating = 0 }) => {
+const Review = ({ defaultRating = 0, numberOfReviews, productId }) => {
   const [userRating, setUserRating] = useState(defaultRating);
   const [hover, setHover] = useState(0);
+  const handleRatingChange = (rating) => {
+    setUserRating(rating);
+    updateReviewCount(productId, rating);
+  };
 
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        {/* Star Inputs */}
         {[1, 2, 3, 4, 5].map((star) => (
           <label
             key={star}
@@ -18,7 +22,7 @@ const Review = ({ defaultRating = 0 }) => {
               name="userRating"
               value={star}
               style={{ display: "none" }}
-              onClick={() => setUserRating(star)}
+              onClick={() => handleRatingChange(star)}
               onMouseEnter={() => setHover(star)}
               onMouseLeave={() => setHover(0)}
             />
@@ -26,7 +30,6 @@ const Review = ({ defaultRating = 0 }) => {
           </label>
         ))}
 
-        {/* Display rating based on user selection */}
         <span
           style={{
             marginLeft: "12px",
@@ -37,6 +40,9 @@ const Review = ({ defaultRating = 0 }) => {
           }}
         >
           {userRating.toFixed(1)}
+        </span>
+        <span className="text-gray-500 text-sm">
+          ({numberOfReviews} reviews)
         </span>
       </div>
     </div>

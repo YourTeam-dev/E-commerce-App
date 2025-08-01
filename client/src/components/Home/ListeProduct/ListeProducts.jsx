@@ -1,8 +1,9 @@
 import React, {  useEffect } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Loader } from 'lucide-react';
 
 function ListeProducts({products}) {
+  const navigate = useNavigate();
   if (!products) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -10,7 +11,7 @@ function ListeProducts({products}) {
       </div>
     );
   }
-  if(products.length === 0){
+  if (products.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p>No products found</p>
@@ -32,7 +33,7 @@ function ListeProducts({products}) {
             />
             <div className="p-4 text-center text-black">
               <h3 className="text-lg font-semibold">{product.title}</h3>
-              <button className="mt-3 bg-black hover:bg-gray-800 text-white text-sm font-medium py-2 px-4 rounded-full">
+              <button onClick={() => navigate(`/product/`, { state: { productId: product._id } })} className="mt-3 bg-black hover:bg-gray-800 text-white text-sm font-medium py-2 px-4 rounded-full">
                 View Product
               </button>
             </div>
