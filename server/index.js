@@ -17,7 +17,7 @@ require('./model')
 
 
 // Routes import
-
+app.use("/api/sellerproduct/",require('./router/sellerProductRoutes'))
 // app.use('api/',require('./router/comment.router'))
 
 
