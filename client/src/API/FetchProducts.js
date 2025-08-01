@@ -23,8 +23,7 @@ export const getProductByCategory = async (id) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetching product by category:", error);
-    return null;
+    return [];
   }
 }
 export const getFeaturedProduct = async () => {
