@@ -29,7 +29,7 @@ function FeaturedCategory() {
             />
             <div className="p-4 text-center">
               <h3 className="text-lg font-semibold text-black">{cat.title}</h3>
-              <button onClick={() => navigate(`/liste-prodcuts`, { state: { category: cat._id } })} className="mt-2 bg-[#d58a94] hover:bg-[#c27781] text-white text-sm font-medium py-2 px-4 rounded-full">
+              <button onClick={() => navigate(`/liste-products`, { state: { category: cat._id } })} className="mt-2 bg-[#d58a94] hover:bg-[#c27781] text-white text-sm font-medium py-2 px-4 rounded-full">
                 Explore
               </button>
             </div>

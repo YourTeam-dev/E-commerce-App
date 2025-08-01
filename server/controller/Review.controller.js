@@ -1,7 +1,6 @@
 const Review = require("../model/Review.model");
 const Product = require("../model/Product.model");
 
-
 const updateRating = async (productId) => {
   const product = await Product.findById(productId);
   if (!product) return;
@@ -17,21 +16,6 @@ const updateRating = async (productId) => {
 };
 
 
-const addReview = async (req, res) => {
-  try {
-    const { productId, userId, review } = req.body;
-    const newReview = await Review.create({ productId, userId, review });
-
-    await updateRating(productId);
-
-    res.status(201).json(newReview);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-
-
 const updateReview = async (req, res) => {
   try {
     const { id } = req.params;
@@ -39,15 +23,17 @@ const updateReview = async (req, res) => {
     const updatedReview = await Review.findByIdAndUpdate(
       id,
       { review },
-      { new: true }
+      { upsert: true, new: true }
     );
-    if (!updatedReview) return res.status(404).json({ message: "Review not found" });
+    if (!updatedReview)
+      return res.status(404).json({ message: "Review not found" });
 
     await updateRating(updatedReview.productId);
 
     res.status(200).json(updatedReview);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error updating review:", error);
+    res.status(500).json({ "Error updating review:": error.message });
   }
 };
 
@@ -55,7 +41,8 @@ const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedReview = await Review.findByIdAndDelete(id);
-    if (!deletedReview) return res.status(404).json({ message: "Review not found" });
+    if (!deletedReview)
+      return res.status(404).json({ message: "Review not found" });
 
     await updateRating(deletedReview.productId);
 
@@ -66,7 +53,6 @@ const deleteReview = async (req, res) => {
 };
 
 module.exports = {
-  addReview,
   updateReview,
   deleteReview,
 };

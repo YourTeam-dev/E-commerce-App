@@ -7,7 +7,7 @@ const headers = {
 
 export const getFiltredProduct = async (data) => {
   try {
-    const response = await axios.post(`${baseUrl}/product/getFiltredProduct`, {
+    const response = await axios.post(`${baseUrl}/products/getFiltredProduct`, {
       params: data,
     });
     return response.data;
@@ -19,16 +19,18 @@ export const getFiltredProduct = async (data) => {
 export const getProductByCategory = async (id) => {
   try {
     const response = await axios.get(
-      `${baseUrl}product/getProductByCategory/${id}`
+      `${baseUrl}products/getProductByCategory/${id}`
     );
     return response.data;
   } catch (error) {
-    return [];
+    console.error("Error fetching product by category:", error);
+    return null;
   }
 }
 export const getFeaturedProduct = async () => {
   try {
-    const response = await axios.get(`${baseUrl}product/FeaturedProduct`);
+    console.log("Fetching featured product...", baseUrl);
+    const response = await axios.get(`${baseUrl}products/FeaturedProduct`);
     console.log(response.data)
     return response.data;
   } catch (error) {

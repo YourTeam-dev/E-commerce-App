@@ -2,21 +2,6 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { getHeroSlider } from "../../../API/Hero";
 
-// const slides = [
-//   {
-//     title: 'Discover New Styles',
-//     subtitle: 'Fresh arrivals just for you.',
-//   },
-//   {
-//     title: 'Summer Collection 2025',
-//     subtitle: 'Cool, comfy & trending now.',
-//   },
-//   {
-//     title: 'Big Deals This Week',
-//     subtitle: 'Save more on top products.',
-//   },
-// ];
-
 const HeroSlider = () => {
   const [slides, setSlides] = useState([]);
   const [current, setCurrent] = useState(0);

@@ -8,7 +8,7 @@ function ListeProductsLayout() {
   const [products, setProducts] = useState([]);
   const { state } = useLocation();
   const category = state?.category;
-
+  console.log("Category from state:", category);
   useEffect(() => {
     getProductByCategory(category).then((res) => setProducts(res));
   }, [category]);
