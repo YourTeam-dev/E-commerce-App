@@ -1,48 +1,101 @@
-import react,{useEffect , useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import './Cart.css'
+
 import ProductItem from './ProductItem'
-export default function ProductListWithQuantity(){
-    const [products,setProducts] = useState([])
-    const [card,setCard] = useState({})
-    
-    const fetchData =async ()=>{
-      const res = await   axios.get('/api/products')
-        .then(res=> setProducts(res.data))
-        .catch(err => console.error("failed to load products",err))
+
+export default function ProductListWithQuantity() {
+  const [products, setProducts] = useState([])
+  const [cart, setCart] = useState({})
+
+
+  useEffect(() => {
+    fetch('/api/products') 
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data)
+      })
+      .catch(err => console.error(err))
+  }, [])
+
+  const handleQuantityChange = (productId, quantity) => {
+    if (quantity > 0) {
+      setCart(prev => ({ ...prev, [productId]: quantity }))
+    } else {
+      const updatedCart = { ...cart }
+      delete updatedCart[productId]
+      setCart(updatedCart)
     }
-    useEffect(()=>{
-       fetchData()
-    },[])
-    const handleQuantityChange = (productId , quantity)=>{
-        setCard(prev => ({...prev,[productId]: parseInt(quantity)}))
-    }
-    
-    const handleOrder = ()=>{
-        const orderItems = Object.entries(card).map(([productId,quantity])=>({
-            productId,
-            quantity
-        }))
+  }
+
+  const handleOrder = () => {
+    const orderItems = Object.entries(cart).map(([productId, quantity]) => ({
+      productId, quantity
+    }))
     if (orderItems.length === 0) {
       alert("Please select quantity for at least one product")
       return
     }
-        axios.post('/api/orders',{
-            userId : "64e123abc123",
-            listeProduct : orderItems
-        })
-        .then(()=> alert("Order placed!"))
-        .catch(err =>{
-            console.error(err);
-            alert("failed to place order")
-        })
-    }
-    return(
-        <div className="container mt-4" style ={{backgroundColor : '#d58a94', padding :"20px",borderRadius : '10px'}}>
-        <h3 className='text-white'> Products </h3>
-       {products.map(product=>(
-        <ProductItem key = {product._id} product={product} quantityChange={handleQuantityChange}/>
-       ))}
-        <button className='btn btn-light' onClick={handleOrder}>Order</button>
+    alert("Order placed!")
+  }
+
+  const itemCount = Object.values(cart).reduce((a, b) => a + b, 0)
+  const totalPrice = products.reduce((acc, product) => {
+    const quantity = cart[product._id] || 0
+    return acc + product.price * quantity
+  }, 0)
+
+  return (
+    <div className="container">
+      <div className="cart-layout">
+        <div className="cart-left">
+          <h2>Shopping Cart</h2>
+          <p>{itemCount} items in your cart</p>
+
+          {products.map(product => {
+            const quantity = cart[product._id] || 0
+            return (
+              <ProductItem
+                key={product._id}
+                product={product}
+                quantity={quantity}
+                quantityChange={handleQuantityChange}
+              />
+            )
+          })}
+
+          {products.length === 0 && (
+            <p>No products found</p>
+          )}
         </div>
-    )
+
+        <div className="cart-right">
+          <h3>Order Summary</h3>
+          <div className="summary-row">
+            <span>Subtotal</span>
+            <span>${totalPrice.toFixed(2)}</span>
+          </div>
+          <div className="summary-row">
+            <span>Shipping</span>
+            <span className="free">Free</span>
+          </div>
+          <div className="summary-row">
+            <span>Tax</span>
+            <span>$0.00</span>
+          </div>
+          <div className="summary-row total">
+            <span>Total</span>
+            <span>${totalPrice.toFixed(2)}</span>
+          </div>
+          <button className="checkout-button" onClick={handleOrder}>Proceed to Checkout</button>
+          <p className="secure-note">Secure checkout powered by SSL encryption</p>
+          <div className="payment-logos">
+            <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" />
+            <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="MasterCard" />
+            <img src="https://img.icons8.com/color/48/000000/amex.png" alt="Amex" />
+            <img src="https://img.icons8.com/color/48/000000/paypal.png" alt="PayPal" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
