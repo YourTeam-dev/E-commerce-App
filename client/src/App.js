@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
 import Home from './pages/Home';
-import Comment from './components/productDetail/comment';
+// import Comment from './components/productDetail/Comment';
 import Cart from './components/AddtoCard/Cart'
 
 
