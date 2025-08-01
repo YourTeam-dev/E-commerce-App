@@ -5,11 +5,11 @@ import React, { useState } from 'react';
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
 import Home from './pages/Home';
-import Comment from './components/productDetail/comment';
+import Comment from './components/productDetail/Comment';
 import Cart from './components/AddtoCard/Cart'
+import ProductDetails from './pages/ProductDetails';
 
 
->>>>>>> 14d56c4124a952d0317cadaef39efbfd99fbf999
 
 function App() {
   const [token, setToken] = useState(null);
@@ -20,17 +20,17 @@ function App() {
         {/* Uncomment or add more routes as needed */}
         {/* {!token && <Route path="/" element={<Navigate to="/signup" replace />} />}
         {token && <Route path="/" element={<Home />} />}
-        <Route path="/cart" element={<Cart />} />
         {/* Add other routes here */}
+        {/* <Route path="/cart" element={<Cart />} /> */}
 
         {/* {!token && <Route path="/signup" element={<Signup setToken={setToken} />} />}
         {!token && <Route path="/login" element={<Login setToken={setToken} />} />} */}
-        <Route path="/*" element={<Home />} />
+        {/* <Route path="/*" element={<Home />} /> */}
         {/* <Route path="/auth" element={<Auth />} />  */}
         {/* <Route path="/products/:productId" element={<ProductDetail />} />
 
         {/* For now, just show ProductDetail at root */}
-       {/* <Route path="/" element={<Comment />} /> */}
+       <Route path="/" element={<ProductDetails />} /> 
 
         {/* Optional: catch all unmatched routes */}
         {/* <Route path="*" element={<NotFound />} /> */}
