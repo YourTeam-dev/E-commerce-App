@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
-const Signup = ({ setToken }) => {
+const Signup = ({ setToken, onSuccess }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,7 +22,7 @@ const Signup = ({ setToken }) => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:5000/api/users/login', {
+      const { data } = await axios.post('http://localhost:5000/api/users/signup', {
         name,
         email,
         password,
@@ -33,7 +33,11 @@ const Signup = ({ setToken }) => {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-      navigate('/login'); 
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        navigate('/login');
+      }
     } catch (err) {
       setError(err.response && err.response.data.message ? err.response.data.message : err.message);
     }
@@ -98,12 +102,6 @@ const Signup = ({ setToken }) => {
           Sign Up
         </button>
       </form>
-      <p className="mt-4 text-center">
-        Already have an account?{' '}
-        <Link to="/login" className="text-blue-600 hover:underline">
-          Login here
-        </Link>
-      </p>
     </div>
   );
 };
