@@ -1,5 +1,5 @@
-const {isSeller} = require("../midlleweare")
-const addProduct = ""
+const express = require("express");
+const router = express.Router();
+router.post("/addComment",require('../controller/comment.controller').addComment)
 
-
-Router('./addProduc',isSeller,addProduct)
+module.exports = router

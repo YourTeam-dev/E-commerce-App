@@ -1,6 +1,6 @@
 const Category = require("../model/Category.model");
 const Product = require("../model/Product.model");
-
+const Hero = require("../model/Hero.model");
 const getProductByCategory = async (req, res) => {
   try {
     const { id } = req.params;
@@ -71,13 +71,13 @@ const getFiltredProduct = async (req, res) => {
     res.status(400).json({ error: error });
   }
 };
-const getHeroProduct = async(req,res)=> {
+const FeaturedProduct = async (req, res) => {
   try {
-    const products = await Product.find({}).sort({ rating: -1 }).limit(5);
+    const products = await Product.find().sort({ rating: -1 }).limit(4);
     res.status(200).json(products);
   } catch (error) {
     res.status(400).json({ error: error });
   }
-}
+};
 
-module.exports = { getProductByCategory, getFiltredProduct };
+module.exports = { getProductByCategory, getFiltredProduct, FeaturedProduct };
