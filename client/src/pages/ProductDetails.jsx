@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Comment from "../components/productDetail/Comment";
+import Comment from "../components/productDetail/comment";
 import ImageContainer from "../components/productDetail/ImageContainer";
 import RightBar from "../components/productDetail/RightBar";
 import { getProductById } from "../API/HandleProductDetail";

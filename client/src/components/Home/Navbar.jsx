@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
 
-const NavBar = ({ token, setToken }) => {
+const NavBar = () => {
   const navigate = useNavigate();
   const [categories, setCatergories] = useState("");
   useEffect(() => {
@@ -102,9 +102,9 @@ const NavBar = ({ token, setToken }) => {
               &times;
             </button>
             {popupType === 'login' ? (
-              <Login setToken={setToken} />
+              <Login />
             ) : (
-              <Signup setToken={setToken} onSuccess={() => setPopupType('login')} />
+              <Signup onSuccess={() => setPopupType('login')} />
             )}
             <div className="mt-4 text-center">
               {popupType === 'login' ? (

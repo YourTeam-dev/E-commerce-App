@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { signupApi } from '../../API/Auth';
 
-const Signup = ({ setToken, onSuccess }) => {
+const Signup = ({ onSuccess }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,26 +22,26 @@ const Signup = ({ setToken, onSuccess }) => {
       return;
     }
 
-    try {
-      const { data } = await axios.post('http://localhost:5000/api/users/signup', {
-        name,
-        email,
-        password,
+    setLoading(true);
+    await signupApi(name, email, password)
+      .then((res) => {
+        setSuccess('Signup successful! Please login.');
+        setName('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          navigate('/login');
+        }
+      })
+      .catch((err) => {
+        setError(err.response && err.response.data.message ? err.response.data.message : err.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-      setToken(data.token);
-      setSuccess('Signup successful! Please login.');
-      setName('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-      if (onSuccess) {
-        onSuccess();
-      } else {
-        navigate('/login');
-      }
-    } catch (err) {
-      setError(err.response && err.response.data.message ? err.response.data.message : err.message);
-    }
   };
 
   return (
@@ -98,8 +99,9 @@ const Signup = ({ setToken, onSuccess }) => {
         <button
           type="submit"
           className="w-full bg-[#d58a94] text-white py-2 rounded hover:bg-[#d58a94]/80 transition"
+          disabled={loading}
         >
-          Sign Up
+          {loading ? 'Signing up...' : 'Sign Up'}
         </button>
       </form>
     </div>

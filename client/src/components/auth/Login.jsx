@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginApi }  from '../../API/Auth';
-const Login = ({ setToken }) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -15,6 +15,7 @@ const Login = ({ setToken }) => {
     setLoading(true);
     await loginApi(email, password).then((res) => {
       localStorage.setItem('token', res.data.token);
+      navigate('/');
       setLoading(false);
     }).catch((err) => {
       setLoading(false);
