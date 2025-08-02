@@ -28,13 +28,13 @@ const NavBar = ({ token, setToken }) => {
   };
 
   return (
-    <div className="sticky top-0 z-50 mb-4 ">
+    <div className="sticky top-0 z-50  ">
 
       <nav className="bg-white shadow-md py-3 px-6 flex items-center justify-between">
         <div className="text-2xl font-bold text-[#d58a94]">9achech</div>
 
         <div className="flex space-x-6 ml-8 text-gray-700 font-medium">
-          <a href="#" className="hover:text-[#d58a94] transition">
+          <a  onClick={() => navigate('/')} className="hover:text-[#d58a94] transition">
             Home
           </a>
           <a onClick={() => setShowCategory(!showCategory)} className="hover:text-[#d58a94] transition flex flex-col">
@@ -75,9 +75,9 @@ const NavBar = ({ token, setToken }) => {
           <div className="flex-grow px-6">
             <ul className="flex flex-wrap">
               {categories.map((category) => (
-                <li key={category.id} className="text-center w-1/6  hover:border-l hover:border-r border-[#d58a94]">
+                <li key={category._id} className="text-center w-1/6  hover:border-l hover:border-r border-[#d58a94]">
                   <a
-                    onClick={() =>{setShowCategory(false); navigate(`/liste-prodcuts/`, { state: { category: category._id } })}}
+                    onClick={() =>{setShowCategory(false); navigate(`/liste-products`, { state: { category: category._id } })}}
                     className="text-gray-700 hover:text-[#d58a94] transition"
                   >
                     {category.title}

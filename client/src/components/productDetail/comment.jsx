@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getCommentsByProductId } from '../../API/HandleProductDetail';
+import { getProductById } from '../../API/HandleProductDetail';
 
 const Comment = ({ productId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 
   useEffect(()=>{
-  getCommentsByProductId(productId).then(data => {
+  getProductById(productId).then(data => {
   setComments(data);
 }); 
 
@@ -15,7 +15,7 @@ const Comment = ({ productId }) => {
   const handleAddComment = () => {
     if (!newComment.trim()) return;
     const newEntry = {
-      id: Date.now(),
+      _id: Date.now(),
       user: 'You',
       text: newComment.trim(),
     };
@@ -29,14 +29,14 @@ const Comment = ({ productId }) => {
         Comments
       </h2>
 
-      <div className="space-y-3">
+      {/* <div className="space-y-3">
         {comments.map((c) => (
-          <div key={c.id} className="border-b pb-2">
+          <div key={c._id} className="border-b pb-2">
             <p className="font-medium">{c.user}</p>
             <p className="text-gray-700">{c.text}</p>
           </div>
         ))}
-      </div>
+      </div> */}
 
       <div className="flex gap-2 pt-4 border-t">
         <input

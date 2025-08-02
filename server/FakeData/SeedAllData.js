@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 const { faker } = require("@faker-js/faker");
 const dotenv = require("dotenv");
-dotenv.config();
+const path = require("path");
+
+// Load .env from the server directory
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 const Category = require("../model/Category.model");
 const User = require("../model/user.model");
@@ -15,7 +18,10 @@ const Hero = require("../model/Hero.model");
 
 async function seed() {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    const mongoUri =
+      process.env.MONGO_URI || "mongodb://localhost:27017/ecommerce";
+    console.log("Connecting to MongoDB with URI:", mongoUri);
+    await mongoose.connect(mongoUri);
 
     await Promise.all([
       Category.deleteMany(),
@@ -83,8 +89,8 @@ async function seed() {
         categoryId: [faker.helpers.arrayElement(categories)._id],
         title: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
-        color: faker.color.human(),
-        size: faker.helpers.arrayElement(["S", "M", "L", "XL"]),
+        color: [faker.color.human()],
+        size: [faker.helpers.arrayElement(["S", "M", "L", "XL"])],
         images: [faker.image.url()],
         price: faker.number.float({ min: 10, max: 1000, precision: 0.01 }),
         promo: faker.number.int({ min: 0, max: 50 }),
@@ -93,6 +99,7 @@ async function seed() {
         commentId: [],
         reviewId: [],
       });
+
       await product.save();
       products.push(product);
     }
@@ -147,16 +154,12 @@ async function seed() {
         faker.number.int({ min: 1, max: 5 })
       );
 
-      
-
-     
-      
-
-    
-
       const order = new Order({
         userId: faker.helpers.arrayElement(users)._id, // assuming you have a `users` array
-        listeProduct:faker.helpers.arrayElements(orderedProducts, faker.number.int({ min: 1, max: 5 })),
+        listeProduct: faker.helpers.arrayElements(
+          orderedProducts,
+          faker.number.int({ min: 1, max: 5 })
+        ),
         totalPrice: faker.number.float({ min: 10, max: 1000, precision: 0.01 }),
         aproveIt: faker.datatype.boolean(),
       });

@@ -1,23 +1,31 @@
 import React, { useState } from 'react';
 import PriceRangeSlider from './filters/PriceRange';
 import StarRatingFilter from './filters/RatingRange';
+import ListeCategory from './filters/ListeCategory';
 
-const categories = ['Electronics', 'Clothing', 'Books', 'Beauty', 'Home'];
 
-function SidebarFilters({ onFilterChange }) {
+function SidebarFilters({ onFilterChange, category }) {
+
   const [price, setPrice] = useState([0, 500]);
-  const [sortBy, setSortBy] = useState('');
+  const [sortBy, setSortBy] = useState();
   const [inStock, setInStock] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
 
-  const handleCategoryToggle = (cat) => {
-    setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
-    );
-  };
-
   const applyFilters = () => {
+    const sort={
+      sortByCreatedAt:sortBy==="newest"?1:-1
+    };
+    switch(sortBy){
+      case 'priceLow':
+        setSortBy('price');
+        break;
+      case 'priceHigh':
+        setSortBy('-price');
+        break;
+      default:
+        break;
+    }
     onFilterChange({
       price,
       sortBy,
@@ -31,7 +39,6 @@ function SidebarFilters({ onFilterChange }) {
     <div className="w-full md:w-64 p-4 bg-white shadow rounded-lg space-y-6">
       <h2 className="text-lg font-bold mb-2">Filters</h2>
 
-      {/* Price Slider */}
       <div>
         <p className="font-semibold mb-1">Price Range</p>
         <PriceRangeSlider
@@ -42,7 +49,6 @@ function SidebarFilters({ onFilterChange }) {
         />
       </div>
 
-      {/* Sort By */}
       <div>
         <p className="font-semibold mb-1">Sort By</p>
         <select
@@ -55,10 +61,10 @@ function SidebarFilters({ onFilterChange }) {
           <option value="priceHigh">Price: High to Low</option>
           <option value="rating">Rating</option>
           <option value="newest">Newest</option>
+          <option value="oldest ">Odlest</option>
         </select>
       </div>
 
-      {/* In Stock */}
       <div className="flex items-center">
         <input
           type="checkbox"
@@ -70,26 +76,8 @@ function SidebarFilters({ onFilterChange }) {
         <label htmlFor="inStock" className="font-medium">In Stock Only</label>
       </div>
 
-      {/* Categories */}
-      <div>
-        <p className="font-semibold mb-1">Categories</p>
-        <div className="space-y-1">
-          {categories.map((cat) => (
-            <div key={cat} className="flex items-center">
-              <input
-                type="checkbox"
-                id={cat}
-                checked={selectedCategories.includes(cat)}
-                onChange={() => handleCategoryToggle(cat)}
-                className="mr-2"
-              />
-              <label htmlFor={cat}>{cat}</label>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ListeCategory selectedCategoryId={category} selectedCategory={setSelectedCategories} />
 
-      {/* Ratings */}
       <div>
         <p className="font-semibold mb-1">Minimum Rating</p>
         <StarRatingFilter
@@ -98,7 +86,6 @@ function SidebarFilters({ onFilterChange }) {
         />
       </div>
 
-      {/* Apply Filters */}
       <button
         onClick={applyFilters}
         className="bg-[#d58a94] text-white w-full py-2 rounded hover:bg-[#c27781] transition"
