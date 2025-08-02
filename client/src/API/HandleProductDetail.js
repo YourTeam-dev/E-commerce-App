@@ -1,22 +1,29 @@
-import axios from "axios"
+import axios from "axios";
+const baseUrl = process.env.REACT_APP_SERVER_API;
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${localStorage.getItem("token")}`,
+};
 
-// src/api/handleproduct.js ✅
 export const getProductById = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+    const response = await axios.get(`${baseUrl}product/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching product by ID:", error);
-    throw error; // Re-throw the error for further handling if needed
   }
-  
 };
-export const getCommentsByProductId = async (productId) => {
+
+
+export const updateReviewCount = async (id, review) => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/comments/${productId}`);
+    const response = await axios.put(
+      `${baseUrl}reviews/${id}`,
+      { review },
+      { headers }
+    );
     return response.data;
   } catch (error) {
-    console.error("Error fetching comments by product ID:", error);
-    throw error;
+    console.error("Error updating review count:", error);
   }
 };

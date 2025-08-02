@@ -6,11 +6,11 @@ const getProductByCategory = async (req, res) => {
     const { id } = req.params;
     const verifCategory = await Category.findById(id);
     if (!verifCategory)
-      return res.status(404).json({ error: "Category not found "+id });
+      return res.status(404).send({ error: "Category not found " + id });
     const products = await Product.find({ categoryId: id });
-    res.status(200).json(products);
+    res.status(200).send(products);
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(400).send({ error: error });
   }
 };
 const getFiltredProduct = async (req, res) => {
@@ -20,15 +20,12 @@ const getFiltredProduct = async (req, res) => {
       maxPrice,
       sortByCreatedAt = 1,
       sortByPrice,
-      sortByQuantity,
       sortByRating,
       search,
       category,
-      adress,
       inStock,
-      promo,
-      color,
-      size,
+      rating,
+
       page = 1,
     } = req.query;
     const FiltredQuery = {};
@@ -49,12 +46,7 @@ const getFiltredProduct = async (req, res) => {
     if (inStock)
       if (inStock === "true") FiltredQuery.quantity = { $gte: 1 };
       else FiltredQuery.quantity = { $lte: 0 };
-    if (promo)
-      if (promo === "true") FiltredQuery.promo = { $gte: 1 };
-      else FiltredQuery.promo = { $lte: 0 };
-    if (color) FiltredQuery.color = color;
-    if (size) FiltredQuery.size = size;
-    if (adress) FiltredQuery.adress = adress;
+    if (rating) FiltredQuery.rating = { $gte: rating };
 
     const sortOptions = {};
     if (sortByCreatedAt) sortOptions.createdAt = Number(sortByCreatedAt);
@@ -74,9 +66,9 @@ const getFiltredProduct = async (req, res) => {
 const FeaturedProduct = async (req, res) => {
   try {
     const products = await Product.find().sort({ rating: -1 }).limit(4);
-    res.status(200).json(products);
+    res.status(200).send(products);
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(400).send({ error: error });
   }
 };
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-
+import { loginApi }  from '../../API/Auth';
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,19 +13,13 @@ const Login = ({ setToken }) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
-    try {
-      const { data } = await axios.post('/api/users/login', {
-        email,
-        password,
-      });
-      setToken(data.token); // store token in App state
+    await loginApi(email, password).then((res) => {
+      localStorage.setItem('token', res.data.token);
       setLoading(false);
-      navigate('/'); // navigate to home page
-    } catch (err) {
+    }).catch((err) => {
       setLoading(false);
       setError(err.response && err.response.data.message ? err.response.data.message : err.message);
-    }
+    })
   };
 
   return (
