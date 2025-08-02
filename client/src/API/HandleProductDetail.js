@@ -14,7 +14,6 @@ export const getProductById = async (id) => {
   }
 };
 
-
 export const updateReviewCount = async (id, review) => {
   try {
     const response = await axios.put(
@@ -25,5 +24,17 @@ export const updateReviewCount = async (id, review) => {
     return response.data;
   } catch (error) {
     console.error("Error updating review count:", error);
+  }
+};
+export const addComment = async (id, comment) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}comments/addComment`,
+      { productId: id, commentText: comment },
+      { headers }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error adding comment:", error);
   }
 };

@@ -4,7 +4,9 @@ import { getFeaturedProduct } from '../../../API/FetchProducts';
 function FeaturedProduct() {
     const [products, setProducts] = useState([]);
     useEffect(() => {
-      getFeaturedProduct().then((res) => setProducts(res));
+      getFeaturedProduct().then((res) => {
+        setProducts(res.slice(0, 4));
+      });
     }, []);
 
 

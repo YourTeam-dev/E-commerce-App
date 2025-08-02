@@ -1,15 +1,16 @@
-import React from 'react'
-import NavBar from '../components/Home/Navbar'
-import { Route, Routes } from 'react-router-dom'
-import MainLayout from '../components/Home/MainLayout'
-import ListeProductsLayout from '../components/Home/ListeProductsLayout'
-import Cart from '../components/AddtoCard/Cart';
-import ProductDetails from './ProductDetails'
+import React from "react";
+import NavBar from "../components/Home/Navbar";
+import { Route, Routes } from "react-router-dom";
+import MainLayout from "../components/Home/MainLayout";
+import ListeProductsLayout from "../components/Home/ListeProductsLayout";
+import Cart from "../components/AddtoCard/Cart";
+import ProductDetails from "./ProductDetails";
+import { ShoppingCart } from "lucide-react";
 
 function Home() {
   return (
-    <div>
-        <NavBar/>
+    <div >
+      <NavBar />
         <Routes>
           <Route path="" element={<MainLayout />} />
           <Route path="liste-products" element={<ListeProductsLayout />} />
@@ -18,7 +19,7 @@ function Home() {
           {/* <Route path="profil" element={} /> */}
         </Routes>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
