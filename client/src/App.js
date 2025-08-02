@@ -14,7 +14,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar token={token} setToken={setToken} />
       <Routes>
         {/* Uncomment or add more routes as needed */}
         {/* {!token && <Route path="/" element={<Navigate to="/signup" replace />} />}
@@ -24,7 +23,7 @@ function App() {
 
         {/* {!token && <Route path="/signup" element={<Signup setToken={setToken} />} />}
         {!token && <Route path="/login" element={<Login setToken={setToken} />} />} */}
-        <Route path="/*" element={<Home />} />
+        <Route path="/*" element={<Home token={token} setToken={setToken} />} />
         {/* <Route path="/auth" element={<Auth />} />  */}
         {/* <Route path="/products/:productId" element={<ProductDetail />} /> */}
 
