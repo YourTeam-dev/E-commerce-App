@@ -2,6 +2,20 @@ const Order= require("../model/Order.model")
 const Product = require("../model/Product.model")
 
 module.exports = {
+     getUserLatestOrder: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const order = await Order.findOne({ userId, aproveIt: true })
+        .sort({ createdAt: -1 })
+        .populate("listeProduct.productId")
+
+      if (!order) return res.status(404).json({ message: "No orders found" })
+
+      res.json(order)
+    } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
+  },
     addOrder : async(req,res)=>{
         try {
             const {userId , listeProduct} = req.body
