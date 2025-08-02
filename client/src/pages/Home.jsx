@@ -9,7 +9,7 @@ import ProductDetails from './ProductDetails'
 function Home() {
   return (
     <div>
-        <NavBar/>
+        <NavBar />
         <Routes>
           <Route path="" element={<MainLayout />} />
           <Route path="liste-products" element={<ListeProductsLayout />} />

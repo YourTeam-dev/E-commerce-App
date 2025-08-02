@@ -8,3 +8,6 @@ const headers = {
 
 export const loginApi = async (email, password) => await axios.post(`${baseUrl}/api/users/login`, { email, password }, { headers });
 
+export const signupApi = async (name, email, password) => await axios.post(`${baseUrl}/api/users/signup`, { name, email, password }, { headers });
+
+
