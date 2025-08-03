@@ -1,37 +1,45 @@
-import React, { useState } from 'react';
-import PriceRangeSlider from './filters/PriceRange';
-import StarRatingFilter from './filters/RatingRange';
-import ListeCategory from './filters/ListeCategory';
+import React, { useState } from "react";
+import PriceRangeSlider from "./filters/PriceRange";
+import StarRatingFilter from "./filters/RatingRange";
+import ListeCategory from "./filters/ListeCategory";
 
-
-function SidebarFilters({ onFilterChange, category }) {
-
+function SidebarFilters({ onFilterChange, filtred }) {
   const [price, setPrice] = useState([0, 500]);
   const [sortBy, setSortBy] = useState();
-  const [inStock, setInStock] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [inStock, setInStock] = useState(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedRating, setSelectedRating] = useState(null);
 
   const applyFilters = () => {
-    const sort={
-      sortByCreatedAt:sortBy==="newest"?1:-1
-    };
-    switch(sortBy){
-      case 'priceLow':
-        setSortBy('price');
+    const sort = {};
+    switch (sortBy) {
+      case "priceLow":
+        sort.sortByPrice = 1;
         break;
-      case 'priceHigh':
-        setSortBy('-price');
+      case "priceHigh":
+        sort.sortByPrice = -1;
+        break;
+      case "rating":
+        sort.sortByRating = -1;
+        break;
+      case "oldest":
+        sort.sortByCreatedAt = 1;
+        break;
+      case "newest":
+        sort.sortByCreatedAt = -1;
         break;
       default:
+        sort.sortByCreatedAt = 1;
         break;
-    }
+    } 
+
     onFilterChange({
-      price,
-      sortBy,
+      minPrice: price[0],
+      maxPrice: price[1],
+      ...sort,
       inStock,
-      selectedCategories,
-      selectedRating,
+      category: selectedCategoryId,
+      rating: selectedRating,
     });
   };
 
@@ -61,7 +69,7 @@ function SidebarFilters({ onFilterChange, category }) {
           <option value="priceHigh">Price: High to Low</option>
           <option value="rating">Rating</option>
           <option value="newest">Newest</option>
-          <option value="oldest ">Odlest</option>
+          <option value="oldest ">Oldest</option>
         </select>
       </div>
 
@@ -73,10 +81,15 @@ function SidebarFilters({ onFilterChange, category }) {
           onChange={() => setInStock(!inStock)}
           className="mr-2"
         />
-        <label htmlFor="inStock" className="font-medium">In Stock Only</label>
+        <label htmlFor="inStock" className="font-medium">
+          In Stock Only
+        </label>
       </div>
 
-      <ListeCategory selectedCategoryId={category} selectedCategory={setSelectedCategories} />
+      <ListeCategory
+        selectedCategoryId={filtred.category}
+        selectedCategory={(cat) => setSelectedCategoryId(cat._id)}
+      />
 
       <div>
         <p className="font-semibold mb-1">Minimum Rating</p>

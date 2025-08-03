@@ -53,7 +53,6 @@ export const createCategory = async (data) => {
 export const getFeaturedCategories = async () => {
     try {
         const response = await axios.get(`${baseUrl}category/getFeaturedCategories`);
-        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error("Error fetching featured categories:", error);
