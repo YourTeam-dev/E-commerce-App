@@ -63,9 +63,11 @@ if (!product) {
 if (element.quantity>10) {
     return res.status(400).json({message :`you can not order more than 10 units of ${product.title}`})
 }
-if (product.quantity && element.quantity > product.stock) {
-    return res.status(400).json({message: `not enough stock for ${product.title}`})
-}
+ if (typeof product.quantity !== "number" || product.quantity < element.quantity) {
+    return res.status(400).json({
+      message: `Not enough stock for ${product.title}. Only ${product.quantity || 0} left.`
+    })
+  }
 
 }
        order.aproveIt = true
