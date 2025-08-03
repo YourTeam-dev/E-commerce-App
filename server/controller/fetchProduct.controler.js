@@ -25,7 +25,6 @@ const getFiltredProduct = async (req, res) => {
       category,
       inStock,
       rating,
-
       page = 1,
     } = req.query;
     const FiltredQuery = {};
@@ -36,8 +35,9 @@ const getFiltredProduct = async (req, res) => {
         { description: { $regex: search, $options: "i" } },
       ];
     }
+    
     if (category) {
-      const cat = await Category.findOne({ title: category }).lean();
+      const cat = await Category.findById(category).lean();
       FiltredQuery.categoryId = cat._id;
     }
     if (maxPrice) {
@@ -51,7 +51,6 @@ const getFiltredProduct = async (req, res) => {
     const sortOptions = {};
     if (sortByCreatedAt) sortOptions.createdAt = Number(sortByCreatedAt);
     if (sortByPrice) sortOptions.price = Number(sortByPrice);
-    if (sortByQuantity) sortOptions.quantity = Number(sortByQuantity);
     if (sortByRating) sortOptions.rating = Number(sortByRating);
     const products = await Product.find(FiltredQuery)
       .sort(sortOptions)
@@ -60,12 +59,13 @@ const getFiltredProduct = async (req, res) => {
 
     res.status(200).json(products);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error });
   }
 };
 const FeaturedProduct = async (req, res) => {
   try {
-    const products = await Product.find().sort({ rating: -1 }).limit(4);
+    const products = await Product.find().sort({ rating: -1 })
     res.status(200).send(products);
   } catch (error) {
     res.status(400).send({ error: error });

@@ -8,7 +8,7 @@ const ImageContainer = ({ images }) => {
     setCurrent((current - 1 + images.length) % images.length);
 
   return (
-    <div className="w-full p-5 bg-[#f9f9f9] rounded-[10px] flex flex-col items-center shadow-[0_0_10px_rgba(0,0,0,0.2)] mb-[220px]">
+    <div className="w-full p-5 bg-[#f9f9f9] rounded-[10px] flex flex-col items-center shadow-[0_0_10px_rgba(0,0,0,0.2)] mb-3">
       <div className="relative w-full max-w-[1000px] h-[400px] overflow-hidden rounded-[10px]">
         {images.map((img, index) => (
           <div
