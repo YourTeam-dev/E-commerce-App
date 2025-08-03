@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Color = ({ colors = ["#000000", "#ffffff", "#d58a94", "#f5b041", "#6a87c7"] }) => {
+const Color = ({ colors  }) => {
   const [selectedColor, setSelectedColor] = useState(null);
 
   return (
