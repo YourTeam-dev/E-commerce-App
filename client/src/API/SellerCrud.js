@@ -6,10 +6,10 @@ const headers = {
   Authorization: `Bearer ${localStorage.getItem("token")}`,
 };
 
-export const fetchProducts = async (sellerId) => {
+export const fetchProducts = async () => {
   try {
     const res = await axios.get(
-      `${baseUrl}sellerproduct/${sellerId}/products`,
+      `${baseUrl}seller-product/products`,
       { headers }
     );
     return res.data;
@@ -19,24 +19,37 @@ export const fetchProducts = async (sellerId) => {
   }
 };
 
-export const addProduct = async (sellerId, newProduct) => {
+export const addProduct = async (newProduct) => {
   try {
-    await axios.post(
-      `${baseUrl} sellerproduct/${sellerId}/products`,
-      newProduct,
-      { headers }
-    );
-    return true;
-  } catch (err) {
+    const formData = new FormData();
+    
+    for (const key in newProduct) {
+      if (key === "images") {
+        newProduct.images.forEach((img) => formData.append("images", img));
+      } else if (Array.isArray(newProduct[key])) {
+        newProduct[key].forEach((val) => formData.append(key, val));
+      } else {
+        formData.append(key, newProduct[key]);
+      }
+    }
+
+    await axios.post(`${baseUrl}seller-product/products`, formData, {
+      headers: {
+        ...headers,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (err) { 
     console.error("Error adding product:", err);
     return false;
   }
 };
 
-export const deleteProduct = async (sellerId, productId) => {
+
+export const deleteProduct = async (productId) => {
   try {
     await axios.delete(
-      `${baseUrl}sellerproduct/${sellerId}/products/${productId}`,
+      `${baseUrl}seller-product/products/${productId}`,
       { headers }
     );
     return true;
@@ -46,10 +59,10 @@ export const deleteProduct = async (sellerId, productId) => {
   }
 };
 
-export const updateProduct = async (sellerId, productId, body) => {
+export const updateProduct = async (productId, body) => {
   try {
     await axios.put(
-      `${baseUrl}sellerproduct/${sellerId}/products/${productId}`,
+      `${baseUrl}seller-product/products/${productId}`,
       body,
       { headers }
     );

@@ -17,10 +17,8 @@ const userRouter = require('./router/user.router');
 
 // Routes import
 
-app.use("/api/sellerproduct/",require('./router/sellerProductRoutes'))
-// app.use('api/',require('./router/comment.router'))
+app.use("/api/seller-product/",require('./router/sellerProductRoutes'))
 
-// Use user router
 app.use('/api/users', userRouter);
 
 app.use('/api/category/',require('./router/category.router'))

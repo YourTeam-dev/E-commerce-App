@@ -5,8 +5,10 @@ import Color from "./RightBar/Color";
 import Quantity from "./RightBar/Quantity";
 import { Truck, RotateCcw, ShieldCheck, Headphones } from "lucide-react";
 import Review from "./RightBar/Reviw";
+import useCart from "../../hooks/useCart";
 
 const RightBar = ({ product }) => {
+  const { addToCart } = useCart();
   return (
     <div className="w-[40%] p-5 bg-white rounded-[10px] flex flex-col gap-5 shadow-[0_0_10px_rgba(0,0,0,0.2)]  ml-10 mb-5">
       <div>
@@ -26,11 +28,11 @@ const RightBar = ({ product }) => {
       <Size sizes={product.size} />
       <Quantity max={product.quantity} />
 
-      <button className="bg-[#d58a94] text-white py-2 px-4 rounded cursor-pointer text-[16px]">
+      <button onClick={() => addToCart(product)} className="bg-[#d58a94] text-white py-2 px-4 rounded cursor-pointer text-[16px]">
         Add to Cart
       </button>
 
-      <div className="text-sm text-[#4caf50] flex flex-col gap-2">
+      {/* <div className="text-sm text-[#4caf50] flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <Truck size={16} />
           <span>Free shipping on orders over $50</span>
@@ -47,7 +49,7 @@ const RightBar = ({ product }) => {
           <Headphones size={16} />
           <span>24/7 customer support</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

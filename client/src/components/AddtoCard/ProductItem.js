@@ -1,69 +1,77 @@
-import React from "react"
+import React, { useEffect, useState } from 'react';
 
+export default function ProductItem({
+  quantity,
+  product,
+  removeItem,
+  onQuantityChange,
+  addProduct,         
+  removeProduct       
+}) {
+  const [quantityItem, setQuantityItem] = useState(quantity);
 
-export default function ProductItem({ quantity, product, quantityChange }) {
-  const isClothing = product.category === "clothing"
+  useEffect(() => {
+    setQuantityItem(quantity);
+  }, [quantity]);
+
+  const handleIncrement = () => {
+    if (quantityItem < product.quantity) {
+      setQuantityItem(prev => prev + 1);
+      onQuantityChange(product._id, quantityItem + 1);
+      addProduct(product); // <- Call from hook
+    }
+  };
+
+  const handleDecrement = () => {
+    if (quantityItem > 1) {
+      setQuantityItem(prev => prev - 1);
+      onQuantityChange(product._id, quantityItem - 1);
+      removeProduct(product._id); // <- Call from hook
+    }
+  };
 
   return (
-    <>
-      <style>{`.hover-shadow:hover 
-      { box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        transition: box-shadow 0.3s ease;}`}
-        </style>
-
-      <div className="card rounded-5 shadow-sm p-3 mb-3 bg-white hover-shadow">
-        <div className="d-flex align-items-center gap-3">
-          <img
-            src={product.images?.[0]}
-            alt={product.title}
-            className="rounded border"
-            style={{ width: "80px", height: "80px", objectFit: "cover" }}
-          />
-          <div className="flex-grow-1">
-            <h5 className="mb-1">{product.title}</h5>
-            <p className="text-muted mb-1">${product.price.toFixed(2)}</p>
-            {isClothing && product.size && product.color && (
-              <p className="text-muted small mb-0">
-                Color: {product.color} | Size: {product.size}
-              </p>
-            )}
-          </div>
-          <div className="text-end d-flex flex-column align-items-end">
-            <button
-              className="btn btn-sm btn-link text-danger mb-2 p-0"
-              onClick={() => quantityChange(product._id, 0)}
-            >
-              Remove
-            </button>
-            <div className="input-group input-group-sm" style={{ width: "110px" }}>
-              <button
-                className="btn btn-outline-secondary"
-                onClick={() => quantityChange(product._id, quantity - 1)}
-                disabled={quantity <= 1}
-              >
-                -
-              </button>
-              <input
-                type="number"
-                className="form-control text-center"
-                value={quantity || ""}
-                min={0}
-                onChange={e => {
-                  const val = parseInt(e.target.value)
-                  quantityChange(product._id, isNaN(val) ? 0 : val)
-                }}
-                style={{ width: "40px" }}
-              />
-              <button
-                className="btn btn-outline-secondary"
-                onClick={() => quantityChange(product._id, quantity + 1)}
-              >
-                +
-              </button>
-            </div>
-          </div>
+    <div className="flex justify-between items-center border-b pb-4 mb-4">
+      <div className="flex items-center gap-4 flex-1">
+        <img src={product.images?.[0]} alt={product.title} className="w-20 h-20 object-cover rounded border" />
+        <div>
+          <h4 className="font-semibold">{product.title}</h4>
+          <p>${product.price.toFixed(2)}</p>
+          <p className="text-sm text-gray-500">In stock: {product.quantity}</p>
         </div>
       </div>
-    </>
-  )
+
+      <div className="flex items-center gap-2">
+        <button
+          className="w-8 h-8 rounded bg-gray-200 hover:bg-gray-300 text-lg"
+          onClick={handleDecrement}
+          disabled={quantityItem <= 1}
+        >
+          −
+        </button>
+        <input
+          type="number"
+          className="w-14 border text-center rounded"
+          value={quantityItem}
+          min={1}
+          max={product.quantity}
+          readOnly
+        />
+        <button
+          className="w-8 h-8 rounded bg-gray-200 hover:bg-gray-300 text-lg"
+          onClick={handleIncrement}
+          disabled={quantityItem >= product.quantity}
+        >
+          +
+        </button>
+
+        <button
+          className="ml-4 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+          onClick={() => removeItem(product._id)}
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  );
 }
