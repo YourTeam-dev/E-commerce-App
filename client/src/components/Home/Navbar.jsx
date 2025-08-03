@@ -1,59 +1,83 @@
-import React, { useEffect, useState } from "react";
-import { ChevronDown, ChevronUp, ShoppingCart } from "lucide-react";
+import React, { use, useEffect, useState } from "react";
+import {
+  ChevronDown,
+  ChevronUp,
+  LogOut,
+  ShoppingCart,
+  User,
+} from "lucide-react";
 import { getAllCategories } from "../../API/Category";
 import { useNavigate } from "react-router-dom";
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
 import useCart from "../../hooks/useCart";
 import Search from "./Search";
+import useAuth from "../../hooks/useAuth";
+import ListeCategory from "./NavBar/ListeCategory";
+import { getProfileApi } from "../../API/Auth";
 
-const NavBar = ({ token, setToken }) => {
+const NavBar = () => {
+  const { isAuthenticated, logout, token } = useAuth();
+  const { cartProduct } = useCart();
+
+  const [profile, setProfile] = useState(false);
+
   const navigate = useNavigate();
   const [categories, setCatergories] = useState("");
-  const { cartProduct } = useCart()
+  useEffect(() => {
+    getProfileApi().then((res) => setProfile(res));
+    console.log(profile);
+  }, []);
   useEffect(() => {
     getAllCategories().then((res) => setCatergories(res));
   }, []);
-  const [showCategory, setShowCategory] = useState(false);
 
+  const [showCategory, setShowCategory] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState("login");
+  const [showProfileDropDown, setShowProfileDropDown] = useState(false);
 
   const closePopup = () => {
     setShowPopup(false);
-  };
-
-  const switchPopup = (type) => {
-    setPopupType(type);
   };
 
   return (
     <div className="sticky top-0 z-50  ">
       <nav className="bg-white shadow-md py-3 px-6 flex items-center justify-between">
         <div className="text-2xl font-bold text-[#d58a94]">9achech</div>
-
         <div className="flex space-x-6 ml-8 text-gray-700 font-medium">
           <a
             onClick={() => navigate("/")}
-            className="hover:text-[#d58a94] transition"
+            className="hover:text-[#d58a94] transition cursor-pointer"
           >
             Home
           </a>
           <a
             onClick={() => setShowCategory(!showCategory)}
-            className="hover:text-[#d58a94] transition flex flex-col"
+            className=" flex flex-row hover:text-[#d58a94] transition cursor-pointer"
           >
             <span>Categories</span>
             <span className="flex justify-center items-center">
               {showCategory ? <ChevronUp /> : <ChevronDown />}
             </span>
           </a>
-
         </div>
-
-      <Search />
-
-        <div>
+        <Search />
+        <div onClick={() => navigate("/cart")} className="relative">
+          <span className="absolute top-0 right-0 w-4 h-4 z-10 bg-red-500 rounded-full text-white text-xs flex justify-center items-center">
+            {cartProduct.length}
+          </span>
+          <ShoppingCart className="sticky top-4 right-4 w-8 h-8  text-[#d58a94] hover:text-[#d58a94] transition" />
+        </div>
+        {isAuthenticated ? (
+          <div
+            onClick={() => setShowProfileDropDown(!showProfileDropDown)}
+            className="flex  items-center text-xs hover:border-b hover:text-[#d58a94] transition cursor-pointer"
+          >
+            Welcome {profile.name}
+            {!showProfileDropDown ? <ChevronDown /> : <ChevronUp />}
+          </div>
+        ) : (
           <button
             onClick={() => {
               setPopupType("login");
@@ -63,40 +87,37 @@ const NavBar = ({ token, setToken }) => {
           >
             Login
           </button>
-        </div>
-        <div onClick={()=> navigate('/cart')} className="relative">
-          <span className="absolute top-0 right-0 w-4 h-4 z-10 bg-red-500 rounded-full text-white text-xs flex justify-center items-center">
-            {cartProduct.length}
-          </span>
-          <ShoppingCart className="sticky top-4 right-4 w-8 h-8  text-[#d58a94] hover:text-[#d58a94] transition" />
-        </div>
+        )}
       </nav>
-
-      {showCategory && (
-        <div className="absolute top-[105%] left-0 w-full bg-white shadow-md py-1 border-t border-gray-200 px-6 flex items-center justify-between">
-          <div className="flex-grow px-6">
-            <ul className="flex flex-wrap">
-              {categories.map((category) => (
-                <li
-                  key={category._id}
-                  className="text-center w-1/6  hover:border-l hover:border-r border-[#d58a94]"
-                >
-                  <a
-                    onClick={() => {
-                      setShowCategory(false);
-                      navigate(`/liste-products`, {
-                        state: { category: category._id },
-                      });
-                    }}
-                    className="text-gray-700 hover:text-[#d58a94] transition"
-                  >
-                    {category.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+      {showProfileDropDown && (
+        <div className="absolute right-6 mt-2 w-40 bg-white text-gray-800 rounded-md shadow-lg z-20">
+          <button
+            onClick={() => {
+              navigate("/profile");
+              setShowProfileDropDown(false);
+            }}
+            className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+          >
+            <User />
+            <span>Profil</span>
+          </button>
+          <button
+            onClick={() => {
+              logout();
+              setShowProfileDropDown(false);
+            }}
+            className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+          >
+            <LogOut />
+            <span>Logout</span>
+          </button>
         </div>
+      )}
+      {showCategory && (
+        <ListeCategory
+          categories={categories}
+          setShowCategory={setShowCategory}
+        />
       )}
 
       {showPopup && (
@@ -110,12 +131,9 @@ const NavBar = ({ token, setToken }) => {
               &times;
             </button>
             {popupType === "login" ? (
-              <Login setToken={setToken} />
+              <Login closePopup={closePopup} />
             ) : (
-              <Signup
-                setToken={setToken}
-                onSuccess={() => setPopupType("login")}
-              />
+              <Signup closePopup={closePopup} />
             )}
             <div className="mt-4 text-center">
               {popupType === "login" ? (
