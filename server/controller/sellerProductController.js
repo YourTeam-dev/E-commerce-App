@@ -1,69 +1,96 @@
-const Product = require('../model/Product.model');
-module.exports={
-// Get all products for one seller
-getProductsBySeller : async function (req, res) {
-  try {
-    const { sellerId } = req.params;
-    const products = await Product.find({ sellerId });
-    res.json(products);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-},
+const Product = require("../model/Product.model");
+module.exports = {
+  getProductsBySeller: async function (req, res) {
+    try {
+      const sellerId  = req.user.isSeller;
+      const products = await Product.find({ sellerId });
+      res.send(products);
+    } catch (err) {
+      res.status(500).send({ error: err.message });
+    }
+  },
 
-// Add product for one seller
-addProductBySeller : async function (req, res) {
-  try {
-    const { sellerId } = req.params;
-    const { title, description, color, size,images,price,promo,quantity,rating } = req.body;
+  addProductBySeller: async function (req, res) {
+    try {
+      const sellerId = req.user.isSeller;
+      const { title, description, price, promo, quantity, categoryId } = req.body;
+      const color = Array.isArray(req.body.color)
+        ? req.body.color
+        : [req.body.color];
+      const size = Array.isArray(req.body.size)
+        ? req.body.size
+        : [req.body.size];
 
-    const newProduct = new Product({
-      title,
-      description,
-      color,
-      size,
-      images,
-      price,
-      promo,
-      quantity,
-      rating,
-      sellerId
-    });
+      const images = req.files.map((file) => file.filename);
+      const categoryIds = Array.isArray(categoryId)
+        ? categoryId
+        : [categoryId];
+      const newProduct = await Product.create({
+        title,
+        description,
+        price,
+        promo,
+        quantity,
+        color,
+        size,
+        images,
+        sellerId,
+        categoryId: categoryIds,
 
-    await newProduct.save();
-    res.status(201).json(newProduct);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-},
+      });
+      res.status(201).send(newProduct);
+    } catch (err) {
+      res.status(400).send({ error: err.message });
+    }
+  },
 
-// Update a seller's product
-updateProductBySeller : async function (req, res) {
-  try {
-    const { sellerId, productId } = req.params;
-    const product = await Product.findOne({ id: productId, sellerId });
+  updateProductBySeller: async function (req, res) {
+    try {
+      const sellerId = req.user.isSeller;
+      const { productId } = req.params;
+      const { title, description, price, promo, quantity } = req.body;
 
-    if (!product) return res.status(404).json({ message: 'Product not found or not yours' });
+      const color = Array.isArray(req.body.color)
+        ? req.body.color
+        : [req.body.color];
+      const size = Array.isArray(req.body.size)
+        ? req.body.size
+        : [req.body.size];
 
-    const updated = await Product.findByIdAndUpdate(productId, req.body, { new: true });
-    res.json(updated);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-},
+      const images = req.files?.map((file) => file.filename) || [];
 
-//Delete a seller's product
-deleteProductBySeller : async function(req, res) {
-  try {
-    const { sellerId, productId } = req.params;
-    const product = await Product.findOne({ id: productId, sellerId });
+      const updated = await Product.findByIdAndUpdate(
+        productId,
+        {
+          title,
+          description,
+          price,
+          promo,
+          quantity,
+          color,
+          size,
+          ...(images.length > 0 && { images }),
+        },
+        { new: true }
+      );
 
-    if (!product) return res.status(404).json({ message: 'Product not found or not yours' });
+      res.send(updated);
+    } catch (err) {
+      res.status(500).send({ error: err.message });
+    }
+  },
 
-    await Product.findByIdAndDelete(productId);
-    res.json({ message: 'Product deleted' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-},
-}
+  deleteProductBySeller: async function (req, res) {
+    try {
+      const { productId } = req.params;
+      await Product.findByIdAndDelete(productId);
+      res.send({ message: "Product deleted" });
+    } catch (err) {
+      res.status(500).send({ error: err.message });
+    }
+  },
+};
+
+
+
+

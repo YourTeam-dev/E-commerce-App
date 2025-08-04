@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema(
     price: { type: Number, default: null },
     promo: { type: Number, default: null },
     quantity: { type: Number, default: null },
-
+    validated: { type: Boolean, default: false },
     rating: { type: Number, default: 0 }
 
   },

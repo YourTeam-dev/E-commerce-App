@@ -12,7 +12,7 @@ export const handleOrder = async order => {
     return response.data
   } catch (error) {
     console.error("Error submitting order:", error)
-    throw error
+     return null
   }
 }
 
@@ -22,6 +22,16 @@ export const getUserLatestOrder = async userId => {
     return response.data
   } catch (error) {
     console.error("Error fetching user order:", error)
-    throw error
+    return null
   }
+}
+export const getOrdersWithSellerProducts =async () => {
+  try {    
+    const response = await axios.get(`${baseUrl}/api/Order/orders-specific-seller`, { headers })
+    return response.data
+  } catch (error) {
+    console.error("Error fetching user order:", error)
+    return []
+  }
+  
 }

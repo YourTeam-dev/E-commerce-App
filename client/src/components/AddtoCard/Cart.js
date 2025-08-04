@@ -1,233 +1,127 @@
-import React, { useEffect, useState } from "react"
-import { handleOrder, getUserLatestOrder } from "../../API/HandleOrder"
+import React, { useEffect, useState } from "react";
+import ProductItem from "./ProductItem";
+import useCart from "../../hooks/useCart";
 
-
-export default function CartComponent() {
-  const [products, setProducts] = useState([])
-  const [cart, setCart] = useState({})
-  const userId = "userId"
+export default function ProductListWithQuantity() {
+  const { cartProduct, removeFromCart, addToCart } = useCart();
+  const [cart, setCart] = useState({});
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    getUserLatestOrder(userId)
-      .then(order => {
-        if (order?.listeProduct?.length > 0) {
-          const cartMap = {}
-          order.listeProduct.forEach(item => {
-            cartMap[item.productId._id] = item.quantity
-          })
-          setCart(cartMap)
-          setProducts(order.listeProduct.map(item => item.productId))
-        }
-      })
-      .catch(err => console.error(err))
-  }, [userId])
+    const cartMap = {};
+    cartProduct.forEach((item) => {
+      cartMap[item._id] = (cartMap[item._id] || 0) + 1;
+    });
+    setCart(cartMap);
+  }, [cartProduct]);
 
-  const handleQuantityChange = (productId, quantity) => {
-    setCart(prev => {
-      const updated = { ...prev }
-      if (quantity > 0) {
-        updated[productId] = quantity
-      } else {
-        delete updated[productId]
-      }
-      return updated
-    })
-  }
+  useEffect(() => {
+    const total = Object.entries(cart).reduce((sum, [productId, qty]) => {
+      const product = cartProduct.find((p) => p._id === productId);
+      if (!product) return sum;
+      return sum + product.price * qty;
+    }, 0);
+    setTotalPrice(total);
+  }, [cart, cartProduct]);
 
-  const submitOrderHandler = () => {
-    const orderItems = Object.entries(cart).map(([productId, quantity]) => ({
-      productId,
-      quantity,
-    }))
+  const handleQuantityChange = (productId, newQty) => {
+    setCart((prev) => ({
+      ...prev,
+      [productId]: newQty,
+    }));
+  };
 
-    if (orderItems.length === 0) {
-      alert("No product passed yet")
-      return
-    }
+  const handleRemove = (productId) => {
+    const newCart = { ...cart };
+    delete newCart[productId];
+    setCart(newCart);
+    removeFromCart(productId,true);
+  };
 
-    handleOrder({
-      userId,
-      listeProduct: orderItems,
-    })
-      .then(() => {
-        alert("Order passed successfully!")
-        setCart({})
-      })
-      .catch(err => console.error(err))
-  }
-
-  const itemCount = Object.values(cart).reduce((a, b) => a + b, 0)
-  const totalPrice = products.reduce((acc, product) => {
-    const quantity = cart[product._id] || 0
-    return acc + product.price * quantity
-  }, 0)
+  const handleOrder = () => {
+    console.log("Order submitted:", cart);
+  };
 
   return (
-    <div className="container py-4">
-      <div className="row">
-        <div className="col-lg-8 mb-4">
-          <h2 className="fw-bold">Shopping Cart</h2>
-          <p className="text-muted">{itemCount} items in your cart</p>
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="flex flex-col lg:flex-row gap-8 bg-white p-6 rounded-xl shadow-md">
+        {/* Cart Left */}
+        <div className="flex-1">
+          <h2 className="text-xl font-bold mb-2">Shopping Cart</h2>
+          <p className="mb-4 text-sm text-gray-600">
+            {Object.keys(cart).length} item(s) in your cart
+          </p>
 
-          <div className="card p-3 shadow rounded-4">
-            {Object.keys(cart).length === 0 ? (
-              <>
-                <p className="text-center text-muted fw-bold">
-                  No product passed yet. Please choose a product.
-                </p>
-                <div className="row g-3 align-items-center pb-3">
-                  <div className="col-md-3">
-                    <div
-                      className="bg-light border rounded"
-                      style={{ width: "100%", height: "80px" }}
-                    />
-                  </div>
-                  <div className="col-md-6 placeholder-glow">
-                    <p className="placeholder col-6 mb-1"></p>
-                    <p className="placeholder col-4 mb-1"></p>
-                  </div>
-                  <div className="col-md-3 text-end">
-                    <button className="btn btn-sm btn-link text-danger mb-2" disabled>
-                      Remove
-                    </button>
-                    <div className="input-group">
-                      <button className="btn btn-outline-secondary" disabled>
-                        -
-                      </button>
-                      <input
-                        type="number"
-                        className="form-control text-center px-1"
-                        style={{ maxWidth: "60px" }}
-                        disabled
-                      />
-                      <button className="btn btn-outline-secondary" disabled>
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              products.map(product => {
-                const quantity = cart[product._id] || 0
-                return (
-                  <div
-                    key={product._id}
-                    className="row g-3 align-items-center pb-3 border-bottom"
-                  >
-                    <div className="col-md-3">
-                      <img
-                        src={product.images?.[0]}
-                        alt={product.title}
-                        className="img-fluid rounded"
-                      />
-                    </div>
-                    <div className="col-md-6">
-                      <h5>{product.title}</h5>
-                      {product.category === "clothing" && (
-                        <p className="text-muted mb-1">
-                          Color: {product.color} | Size: {product.size}
-                        </p>
-                      )}
-                      <p className="text-muted mb-1">${product.price.toFixed(2)}</p>
-                    </div>
-                    <div className="col-md-3 text-end">
-                      <button
-                        className="btn btn-sm btn-link text-danger mb-2"
-                        onClick={() => handleQuantityChange(product._id, 0)}
-                      >
-                        Remove
-                      </button>
-                      <div className="input-group">
-                        <button
-                          className="btn btn-outline-secondary"
-                          onClick={() =>
-                            handleQuantityChange(product._id, quantity - 1)
-                          }
-                          disabled={quantity <= 1}
-                        >
-                          -
-                        </button>
-                        <input
-                          type="number"
-                          className="form-control text-center px-1"
-                          style={{ maxWidth: "60px" }}
-                          value={quantity}
-                          min={0}
-                          onChange={e =>
-                            handleQuantityChange(
-                              product._id,
-                              Math.max(0, parseInt(e.target.value) || 0)
-                            )
-                          }
-                        />
-                        <button
-                          className="btn btn-outline-secondary"
-                          onClick={() =>
-                            handleQuantityChange(product._id, quantity + 1)
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })
-            )}
-          </div>
+          {Object.keys(cart).length === 0 && <p>No products found</p>}
+
+          {Object.keys(cart).map((productId) => {
+            const product = cartProduct.find((p) => p._id === productId);
+            if (!product) return null;
+
+            return (
+              <ProductItem
+                key={productId}
+                product={product}
+                quantity={cart[productId]}
+                removeItem={handleRemove}
+                onQuantityChange={handleQuantityChange}
+                addProduct={addToCart}
+                removeProduct={removeFromCart}
+              />
+            );
+          })}
         </div>
 
-        <div className="col-lg-4">
-          <div className="card p-3 shadow rounded-4">
-            <h5 className="fw-bold">Order Summary</h5>
-            <div className="d-flex justify-content-between">
-              <span>Subtotal ({itemCount} items)</span>
-              <span>${totalPrice.toFixed(2)}</span>
-            </div>
-            <div className="d-flex justify-content-between">
-              <span>Savings</span>
-              <span className="text-success">-${(totalPrice * 0.23).toFixed(2)}</span>
-            </div>
-            <div className="d-flex justify-content-between">
-              <span>Shipping</span>
-              <span>Soon</span>
-            </div>
-            <div className="d-flex justify-content-between">
-              <span>Tax</span>
-              <span>$0.00</span>
-            </div>
-            <hr />
-            <div className="d-flex justify-content-between fw-bold">
-              <span>Total</span>
-              <span>${totalPrice.toFixed(2)}</span>
-            </div>
+        {/* Cart Right */}
+        <div className="w-full lg:w-1/3 border-t lg:border-t-0 lg:border-l border-gray-200 pt-6 lg:pt-0 lg:pl-6">
+          <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
+          <div className="flex justify-between mb-2 text-sm">
+            <span>Subtotal</span>
+            <span>${totalPrice.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between mb-2 text-sm">
+            <span>Shipping</span>
+            <span className="text-green-600 font-semibold">Free</span>
+          </div>
+          <div className="flex justify-between mb-2 text-sm">
+            <span>Tax</span>
+            <span>$0.00</span>
+          </div>
+          <div className="flex justify-between border-t border-gray-300 pt-4 font-bold text-base">
+            <span>Total</span>
+            <span>${totalPrice.toFixed(2)}</span>
+          </div>
+          <button
+            className="mt-6 w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition"
+            onClick={handleOrder}
+          >
+            Proceed to Checkout
+          </button>
+          <p className="text-xs text-center text-gray-500 mt-2">
+            Secure checkout powered by SSL encryption
+          </p>
 
-            <button className="btn btn-primary w-100 mt-3" onClick={submitOrderHandler}>
-              Proceed to Checkout
-            </button>
-            <div className="payment-logos d-flex justify-content-center gap-3 my-3">
-              <img
-                src="https://img.icons8.com/color/48/000000/visa.png"
-                alt="Visa"
-                style={{ height: 30 }}
-              />
-              <img
-                src="https://img.icons8.com/color/48/000000/mastercard.png"
-                alt="MasterCard"
-                style={{ height: 30 }}
-              />
-              <img
-                src="https://img.icons8.com/color/48/000000/amex.png"
-                alt="Amex"
-                style={{ height: 30 }}
-              />
-              <img
-                src="https://img.icons8.com/color/48/000000/paypal.png"
-                alt="PayPal"
-                style={{ height: 30 }}
-              />
-            </div>
+          <div className="flex justify-center gap-4 mt-4">
+            <img
+              src="https://img.icons8.com/color/48/000000/visa.png"
+              alt="Visa"
+              className="h-8"
+            />
+            <img
+              src="https://img.icons8.com/color/48/000000/mastercard.png"
+              alt="MasterCard"
+              className="h-8"
+            />
+            <img
+              src="https://img.icons8.com/color/48/000000/amex.png"
+              alt="Amex"
+              className="h-8"
+            />
+            <img
+              src="https://img.icons8.com/color/48/000000/paypal.png"
+              alt="PayPal"
+              className="h-8"
+            />
           </div>
         </div>
       </div>

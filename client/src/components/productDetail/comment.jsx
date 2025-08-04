@@ -1,57 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { getProductById } from '../../API/HandleProductDetail';
+import React, { use, useEffect, useState } from "react";
+import { addComment, getProductById } from "../../API/HandleProductDetail";
 
-const Comment = ({ productId }) => {
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+const Comment = ({ listeComments,productId }) => {
+  const [comments, setComments] = useState(listeComments);
+  const [newComment, setNewComment] = useState("");
 
-  useEffect(()=>{
-  getProductById(productId).then(data => {
-  setComments(data);
-}); 
-
-  },[productId])
-  
   const handleAddComment = () => {
     if (!newComment.trim()) return;
     const newEntry = {
       _id: Date.now(),
-      user: 'You',
+      user: "You",
       text: newComment.trim(),
     };
     setComments([newEntry, ...comments]);
-    setNewComment('');
+    setNewComment("");
+  };
+  const addNewComment = (e) => {
+    if (e.key === 'Enter') {
+      if(newComment.trim()) {
+        addComment(productId, newComment)
+        setNewComment('')
+        setComments([...comments])
+      }
+    }
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow space-y-4 max-w-xl mx-auto">
-      <h2 className="text-xl font-semibold" style={{ color: '#d58a94' }}>
-        Comments
-      </h2>
-
-      {/* <div className="space-y-3">
+    <div className="p-4 bg-white  space-y-4  ">
+      <div className="space-y-3 w-full">
         {comments.map((c) => (
           <div key={c._id} className="border-b pb-2">
-            <p className="font-medium">{c.user}</p>
-            <p className="text-gray-700">{c.text}</p>
+            <p className="font-semibold text-sm">{c.userId.name}</p>
+            <p className="ml-4 mt-1 text-sm text-gray-700">{c.commentText}</p>
           </div>
         ))}
-      </div> */}
+      </div>
 
-      <div className="flex gap-2 pt-4 border-t">
+      <div className="flex gap-2 pt-4 border-t border-[#d58a94]">
         <input
           type="text"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           placeholder="Write a comment..."
-          className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2"
+          onKeyDown={addNewComment}
+          className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#d58a94]"
         />
-        <button
-          onClick={handleAddComment}
-          className="bg-[#d58a94] text-white px-4 py-2 rounded hover:bg-pink-600"
-        >
-          Post
-        </button>
       </div>
     </div>
   );

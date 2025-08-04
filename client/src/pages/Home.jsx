@@ -1,10 +1,11 @@
-import React from 'react'
-import NavBar from '../components/Home/Navbar'
-import { Route, Routes } from 'react-router-dom'
-import MainLayout from '../components/Home/MainLayout'
-import ListeProductsLayout from '../components/Home/ListeProductsLayout'
-import Cart from '../components/AddtoCard/Cart';
-import ProductDetails from './ProductDetails'
+import React from "react";
+import NavBar from "../components/Home/Navbar";
+import { Route, Routes } from "react-router-dom";
+import MainLayout from "../components/Home/MainLayout";
+import ListeProductsLayout from "../components/Home/ListeProductsLayout";
+import Cart from "../components/AddtoCard/Cart";
+import ProductDetails from "./ProductDetails";
+import Profile from "./Profile";
 
 function Home() {
   return (
@@ -15,10 +16,10 @@ function Home() {
           <Route path="liste-products" element={<ListeProductsLayout />} />
           <Route path="cart" element={<Cart />} />
           <Route path="product/" element={<ProductDetails />} />
-          {/* <Route path="profil" element={} /> */}
+          <Route path="profile/*" element={<Profile />} />
         </Routes>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
