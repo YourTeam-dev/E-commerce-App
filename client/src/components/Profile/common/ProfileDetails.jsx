@@ -5,15 +5,17 @@ function ProfileDetails({ profile }) {
   const [showpdate, setshowUpdate] = useState(false);
   const [upgradeLoading, setUpgradeLoading] = useState(false);
   const [updateProfile, setupdateProfile] = useState({
-    name: profile.name,
-    email: profile.email,
-    adress: profile.adress,
-    phone: profile.phone,
+    name: profile ? profile.name : '',
+    email: profile ? profile.email : '',
+    adress: profile ? profile.adress : '',
+    phone: profile ? profile.phone : '',
   });
-  const userType = profile.isAdmin
-    ? "Admin"
-    : profile.isSeller
-    ? "Seller"
+  const userType = profile
+    ? profile.isAdmin
+      ? "Admin"
+      : profile.isSeller
+      ? "Seller"
+      : "Client"
     : "Client";
 
   const handleSellerUpgrade = () => {

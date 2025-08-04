@@ -31,6 +31,7 @@ app.use("/api/reviews", require("./router/Review.router"));
 
 
 app.use('/api/Order',require('./router/order.router'))
+app.use('/api/historic', require('./router/setting/historic.router'))
 
 
 
