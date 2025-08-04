@@ -22,6 +22,8 @@ import useAuth from "../hooks/useAuth";
 import { getProfileApi } from "../API/Auth";
 import { Loader } from "lucide-react";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import HeroManagement from "../components/Profile/admin/HeroManagement";
+import CategoriesManagement from "../components/Profile/admin/CategoriesManagement";
 
 function Profile() {
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ function Profile() {
   useEffect(() => {
     getProfileApi()
       .then((res) => {
+        console.log(res);
         setProfile(res);
         setLoading(false);
       })
@@ -54,72 +57,80 @@ function Profile() {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
       <Sidebar profile={profile} />
-    <div className="bg-white mx-auto h-full p-12 rounded-lg w-9/12 shadow my-3">
-      <Routes>
-        {/* Admin Routes */}
-        <Route
-          path="admin/profile"
-          element={<ProfileDetails profile={profile} />}
-        />
-        <Route
-          path="admin/validate-products"
-          element={<AdminValidProducts profile={profile} />}
-          profile={profile}
-        />
-        <Route
-          path="admin/validate-orders"
-          element={<AdminValidOrders profile={profile} />}
-        />
-        <Route
-          path="admin/analytics"
-          element={<AdminAnalytic profile={profile} />}
-        />
-        <Route
-          path="admin/historics"
-          element={<History profile={profile} />}
-        />
+      <div className="bg-white mx-auto h-full p-12 rounded-lg w-9/12 shadow my-3">
+        <Routes>
+          {/* Admin Routes */}
+          <Route
+            path="admin/profile"
+            element={<ProfileDetails profile={profile} />}
+          />
+          <Route
+            path="admin/validate-products"
+            element={<AdminValidProducts profile={profile} />}
+            profile={profile}
+          />
+          <Route
+            path="admin/validate-orders"
+            element={<AdminValidOrders profile={profile} />}
+          />
+          <Route
+            path="admin/hero-management"
+            element={<HeroManagement profile={profile} />}
+          />
+          <Route
+            path="admin/categories-management"
+            element={<CategoriesManagement profile={profile} />}
+          />
+          <Route
+            path="admin/analytics"
+            element={<AdminAnalytic profile={profile} />}
+          />
+          <Route
+            path="admin/historics"
+            element={<History profile={profile} />}
+          />
 
-        {/* Seller Routes */}
-        <Route
-          path="seller/profile"
-          element={<ProfileDetails profile={profile} />}
-        />
+          {/* Seller Routes */}
+          <Route
+            path="seller/profile"
+            element={<ProfileDetails profile={profile} />}
+          />
 
-        <Route
-          path="seller/orders"
-          element={<SellerOrders profile={profile} />}
-        />
-        <Route
-          path="seller/products"
-          element={<SellerListeProducts profile={profile} />}
-        />
-        <Route
-          path="/seller/add-product"
-          element={<SellerAddProduct profile={profile} />}
-        />
-        <Route
-          path="seller/analytics"
-          element={<SellerAnalytics profile={profile} />}
-        />
-        <Route
-          path="admin/historics"
-          element={<History profile={profile} />}
-        />
+          <Route
+            path="seller/orders"
+            element={<SellerOrders profile={profile} />}
+          />
+          <Route
+            path="seller/products"
+            element={<SellerListeProducts profile={profile} />}
+          />
+          <Route
+            path="/seller/add-product"
+            element={<SellerAddProduct profile={profile} />}
+          />
+          <Route
+            path="seller/analytics"
+            element={<SellerAnalytics profile={profile} />}
+          />
+          <Route
+            path="admin/historics"
+            element={<History profile={profile} />}
+          />
 
-        {/* Client Routes */}
-        <Route
-          path="client/profile"
-          element={<ProfileDetails profile={profile} />}
-        />
-        <Route
-          path="client/orders"
-          element={<ClientOrders profile={profile} />}
-        />
-        <Route
-          path="/admin/historics"
-          element={<History profile={profile} />}
-        />
-      </Routes>
+          {/* Client Routes */}
+          <Route
+            path="client/profile"
+            element={<ProfileDetails profile={profile} />}
+          />
+          <Route
+            path="client/orders"
+            element={<ClientOrders profile={profile} />}
+          />
+          <Route
+            path="/admin/historics"
+            element={<History profile={profile} />}
+          />
+        </Routes>
       </div>
     </div>
   );

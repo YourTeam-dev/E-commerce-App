@@ -7,14 +7,22 @@ const headers = {
 export const getHeroSlider = async()=>{
     try {
         const response = await axios.get(`${baseUrl}hero/getHero`);
+        if (!response.data || !Array.isArray(response.data)) {
+           return []; 
+        }
         return response.data;
     } catch (error) {
         console.error("Error fetching hero slider:", error);
+        return [];
     }
 }
 export const addHero = async (data) => {
     try {
-        const response = await axios.post(`${baseUrl}hero/addHero`, data, { headers });
+        const response = await axios.post(`${baseUrl}hero/addHero`, data, { headers: {
+            ...headers,
+           "Content-Type": "multipart/form-data",
+        }
+        });
         return response.data;
     } catch (error) {
         console.error("Error creating hero:", error);
@@ -24,7 +32,11 @@ export const addHero = async (data) => {
 
 export const updateHero = async (id, data) => {
     try {
-        const response = await axios.put(`${baseUrl}hero/updateHero/${id}`, data, { headers });
+        const formData = new FormData();
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+        const response = await axios.put(`${baseUrl}hero/updateHero/${id}`, formData, { headers });
         return response.data;
     } catch (error) {
         console.error("Error updating hero:", error);

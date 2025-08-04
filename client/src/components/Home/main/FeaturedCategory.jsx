@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function FeaturedCategory() {
   const navigate = useNavigate();
+  const baseUrl = process.env.REACT_APP_IMAGE_URL;
     const [category, setCategory] = useState([]);
     useEffect(() => {
       getFeaturedCategories().then((res) => setCategory(res));
@@ -23,7 +24,7 @@ function FeaturedCategory() {
             className="bg-white shadow-md rounded-2xl overflow-hidden transition-transform hover:scale-105 hover:shadow-lg hover:shadow-[#d58a94] cursor-pointer"
           >
             <img
-              src={cat.image}
+              src={`${baseUrl}${cat.image}`}
               alt={cat.title}
               className="w-full h-40 object-cover"
             />

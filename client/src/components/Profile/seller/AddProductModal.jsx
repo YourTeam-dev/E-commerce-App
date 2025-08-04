@@ -71,7 +71,7 @@ function AddProductModal({ onClose }) {
     addProduct(formData)
       .then(() => {
         setLoading(false);
-        onClose(); // Optionally close modal on success
+        onClose();
       })
       .catch((err) => {
         console.error("Error adding product:", err);

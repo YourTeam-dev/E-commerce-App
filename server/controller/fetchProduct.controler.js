@@ -4,7 +4,7 @@ const Hero = require("../model/Hero.model");
 const getProductByCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const verifCategory = await Category.findById(id);
+    const verifCategory = await Category.findOne({ _id: id, validated: true });
     if (!verifCategory)
       return res.status(404).send({ error: "Category not found " + id });
     const products = await Product.find({ categoryId: id });
@@ -35,7 +35,7 @@ const getFiltredProduct = async (req, res) => {
         { description: { $regex: search, $options: "i" } },
       ];
     }
-    
+
     if (category) {
       const cat = await Category.findById(category).lean();
       FiltredQuery.categoryId = cat._id;
@@ -52,7 +52,8 @@ const getFiltredProduct = async (req, res) => {
     if (sortByCreatedAt) sortOptions.createdAt = Number(sortByCreatedAt);
     if (sortByPrice) sortOptions.price = Number(sortByPrice);
     if (sortByRating) sortOptions.rating = Number(sortByRating);
-    const products = await Product.find(FiltredQuery)
+    //  only show 25 products per page
+    const products = await Product.find({ ...FiltredQuery, validated: true })
       .sort(sortOptions)
       .skip((page - 1) * 25)
       .limit(25);
@@ -65,11 +66,37 @@ const getFiltredProduct = async (req, res) => {
 };
 const FeaturedProduct = async (req, res) => {
   try {
-    const products = await Product.find().sort({ rating: -1 })
+    const products = await Product.find({ validated: true }).sort({ rating: -1 });
     res.status(200).send(products);
   } catch (error) {
     res.status(400).send({ error: error });
   }
 };
+const ValidateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, { validated: true }, { new: true });
+    res.status(200).send(product);
+  } catch (error) {
+    res.status(400).send({ error: error });
+  }
+};
+const getInvalidatedProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ validated: false });
+    res.status(200).send(products);
+  } catch (error) {
+    res.status(400).send({ error: error });
+  }
+};
+  const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Product.findByIdAndDelete(id);
+    res.status(200).send({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(400).send({ error: error });
+  }
+};
 
-module.exports = { getProductByCategory, getFiltredProduct, FeaturedProduct };
+module.exports = { deleteProduct, getProductByCategory, getFiltredProduct, FeaturedProduct, ValidateProduct, getInvalidatedProducts };

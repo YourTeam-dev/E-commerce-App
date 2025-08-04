@@ -25,7 +25,7 @@ export const getCategoryPath = async (id) => {
 };
 export const updateCategory = async (id, data) => {
     try {
-        const response = await axios.put(`${baseUrl}/category/updateCategory/${id}`, data, { headers });
+        const response = await axios.put(`${baseUrl}category/updateCategory/${id}`, data, { headers });
         return response.data;
     } catch (error) {
         console.error("Error updating category:", error);
@@ -34,7 +34,7 @@ export const updateCategory = async (id, data) => {
 };
 export const deleteCategory = async (id) => {
     try {
-        const response = await axios.delete(`${baseUrl}/category/deleteCategory/${id}`, { headers });
+        const response = await axios.delete(`${baseUrl}category/deleteCategory/${id}`, { headers });
         return response.data;
     } catch (error) {
         console.error("Error deleting category:", error);
@@ -43,7 +43,7 @@ export const deleteCategory = async (id) => {
 };
 export const createCategory = async (data) => {
     try {
-        const response = await axios.post(`${baseUrl}/category/addCategory`, data, { headers });
+        const response = await axios.post(`${baseUrl}category/addCategory`, data, { headers });
         return response.data;
     } catch (error) {
         console.error("Error creating category:", error);

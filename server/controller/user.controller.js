@@ -35,7 +35,8 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log("Login attempt with email:", email);
+    console.log("Login attempt with password:", password);
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
@@ -59,8 +60,8 @@ const login = async (req, res) => {
 const getUser = async (req, res) => {
   try {
     const id = req.user._id;
-    const { _id, name, email, isSeller } = await User.findById(id).populate("isSeller");
-    res.status(200).json({ _id, name, email, isSeller });
+    const { _id, name, email, isSeller, isAdmin } = await User.findById(id).populate("isSeller");
+    res.status(200).json({ _id, name, email, isSeller, isAdmin });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

@@ -5,12 +5,12 @@ app.use(express.json())
 app.use(cors())
 const dotenv = require('dotenv');
 dotenv.config();
-
+const path = require('path');
 const port = process.env.PORT
 console.log("port:",  port)
 require('./model')
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// Import user router
 const userRouter = require('./router/user.router');
 
 
