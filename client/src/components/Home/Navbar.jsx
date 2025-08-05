@@ -20,7 +20,7 @@ const NavBar = () => {
   const { isAuthenticated, logout, token } = useAuth();
   const { cartProduct } = useCart();
 
-  const [profile, setProfile] = useState(false);
+  const [profile, setProfile] = useState(null);
 
   const navigate = useNavigate();
   const [categories, setCatergories] = useState("");
@@ -74,7 +74,7 @@ const NavBar = () => {
             onClick={() => setShowProfileDropDown(!showProfileDropDown)}
             className="flex  items-center text-xs hover:border-b hover:text-[#d58a94] transition cursor-pointer"
           >
-            Welcome {profile.name}
+            Welcome {profile ? profile.name : ''}
             {!showProfileDropDown ? <ChevronDown /> : <ChevronUp />}
           </div>
         ) : (
