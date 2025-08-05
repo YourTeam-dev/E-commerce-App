@@ -6,9 +6,9 @@ const headers = {
   Authorization: `Bearer ${localStorage.getItem("token")}`
 }
 
-export const handleOrder = async order => {
+export const addOrder = async order => {
   try {
-    const response = await axios.post(`${baseUrl}/api/orders`, order, { headers })
+    const response = await axios.post(`${baseUrl}Order`, order, { headers })
     return response.data
   } catch (error) {
     console.error("Error submitting order:", error)
@@ -18,7 +18,7 @@ export const handleOrder = async order => {
 
 export const getUserLatestOrder = async userId => {
   try {
-    const response = await axios.get(`${baseUrl}/api/Order/user/${userId}`, { headers })
+    const response = await axios.get(`${baseUrl}Order/user/${userId}`, { headers })
     return response.data
   } catch (error) {
     console.error("Error fetching user order:", error)
@@ -38,7 +38,8 @@ export const getOrdersWithSellerProducts = async () => {
 
 export const getAllOrders = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/Order`, { headers })
+    const response = await axios.get(`${baseUrl}Order`, { headers })
+    console.log(response.data)  
     return response.data
   } catch (error) {
     console.error("Error fetching all orders:", error)
@@ -46,11 +47,11 @@ export const getAllOrders = async () => {
   }
 }
 
-export const validateOrder = async (orderId, approve = true) => {
+export const validateOrder = async (orderId, productId) => {
   try {
-    const response = await axios.put(
-      `${baseUrl}/api/Order/${orderId}/validate`,
-      { approveIt: approve },
+    const response = await axios.patch(
+      `${baseUrl}Order/${orderId}/products/${productId}/validate`,
+      {},
       { headers }
     )
     return response.data
@@ -59,3 +60,16 @@ export const validateOrder = async (orderId, approve = true) => {
     return null
   }
 }
+export const rejectOrder = async (orderId, productId) => {
+  try {
+    const response = await axios.delete(
+      `${baseUrl}Order/${orderId}/products/${productId}/reject`,
+      { headers }
+    )
+    return response.data
+  } catch (error) {
+    console.error("Error rejecting order:", error)
+    return null
+  }
+}
+

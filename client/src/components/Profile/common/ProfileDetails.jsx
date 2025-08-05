@@ -10,12 +10,7 @@ function ProfileDetails({ profile }) {
     adress: profile ? profile.adress : '',
     phone: profile ? profile.phone : '',
   });
-  const userType = profile
-    ? profile.isAdmin
-      ? "Admin"
-      : profile.isSeller
-      ? "Seller"
-      : "Client"
+
 
   const userType = profile.isAdmin
     ? "Admin"

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ProductItem from "./ProductItem";
 import useCart from "../../hooks/useCart";
-
+import { Loader } from "lucide-react";
+import { addOrder } from "../../API/HandleOrder";
 export default function ProductListWithQuantity() {
   const { cartProduct, removeFromCart, addToCart } = useCart();
   const [cart, setCart] = useState({});
@@ -39,7 +40,20 @@ export default function ProductListWithQuantity() {
   };
 
   const handleOrder = () => {
-    console.log("Order submitted:", cart);
+    console.log(cart);
+    addOrder({
+      listeProduct:Object.keys(cart).map((item) => ({
+        productId:item,
+        quantity:cart[item]
+      })),
+      totalPrice:totalPrice
+    }).then((res) => {
+      Object.keys(cart).map((item) => {
+        removeFromCart(item,true);
+      }) 
+    }).catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

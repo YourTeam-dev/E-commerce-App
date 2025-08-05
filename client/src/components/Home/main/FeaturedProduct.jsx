@@ -1,9 +1,10 @@
 import React, { use, useState } from 'react';
 import { useEffect } from 'react';
 import { getFeaturedProduct } from '../../../API/FetchProducts';
+import { useNavigate } from 'react-router-dom';
 function FeaturedProduct() {
   const baseUrl = process.env.REACT_APP_IMAGE_URL;
-
+  const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     useEffect(() => {
       getFeaturedProduct().then((res) => {
@@ -32,7 +33,7 @@ function FeaturedProduct() {
             />
             <div className="p-4 text-center text-black">
               <h3 className="text-lg font-semibold">{product.title}</h3>
-              <button className="mt-3 bg-black hover:bg-gray-800 text-white text-sm font-medium py-2 px-4 rounded-full">
+              <button onClick={() => navigate(`/product`,{state:{productId:product._id}})} className="mt-3 bg-black hover:bg-gray-800 text-white text-sm font-medium py-2 px-4 rounded-full">
                 View Product
               </button>
             </div>
