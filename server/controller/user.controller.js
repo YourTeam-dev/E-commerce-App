@@ -62,6 +62,7 @@ const getUser = async (req, res) => {
     const id = req.user._id;
     const { _id, name, email, isSeller, isAdmin } = await User.findById(id).populate("isSeller");
     res.status(200).json({ _id, name, email, isSeller, isAdmin });
+
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
