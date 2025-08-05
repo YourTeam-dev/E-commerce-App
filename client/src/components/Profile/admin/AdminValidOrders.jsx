@@ -1,84 +1,87 @@
-import React, { useEffect, useState } from "react"
-import axios from "axios"
+import React, { useEffect, useState } from "react";
+import { Loader } from "lucide-react";
+import {
+  getAllOrders,
+  validateOrder,
+  rejectOrder,
+} from "../../../API/HandleOrder";
+import axios from "axios";
 
 const AdminValidOrders = () => {
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/Order")
-        const cleaned = res.data.map(order => ({
+    getAllOrders()
+      .then((res) => {
+        const cleaned = res.map((order) => ({
           ...order,
-          listeProduct: (order.listeProduct || []).filter(p => p.productId)
-        }))
-        setOrders(cleaned)
-      } catch (err) {
-        console.error("Failed to fetch orders:", err)
-      }
-    }
-
-    fetchOrders()
-  }, [])
+          listeProduct: (order.listeProduct || []).filter((p) => p.productId),
+        }));
+        setOrders(cleaned);
+      })
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
+      });
+  }, []);
 
   const handleValidate = async (orderId, productId) => {
-    try {
-      await axios.patch(`http://localhost:5000/api/Order/${orderId}/products/${productId}/validate`)
+    validateOrder(orderId, productId)
+      .then((res) => {
+        setOrders((prevOrders) =>
+          prevOrders
+            .map((order) => {
+              if (order._id === orderId) {
+                const updatedProducts = order.listeProduct
+                  .map((prod) =>
+                    prod.productId._id === productId
+                      ? { ...prod, status: "validated" }
+                      : prod
+                  )
+                  .filter((prod) => prod.status !== "validated");
+                return { ...order, listeProduct: updatedProducts };
+              }
+              return order;
+            })
+            .filter((order) => order.listeProduct.length > 0)
+        );
 
-      setOrders(prevOrders =>
-        prevOrders
-          .map(order => {
-            if (order._id === orderId) {
-              const updatedProducts = order.listeProduct
-                .map(prod =>
-                  prod.productId._id === productId
-                    ? { ...prod, status: "validated" }
-                    : prod
-                )
-                .filter(prod => prod.status !== "validated")
-              return { ...order, listeProduct: updatedProducts }
-            }
-            return order
-          })
-          .filter(order => order.listeProduct.length > 0)
-      )
-
-      alert(`✅ Product ${productId} validated in order ${orderId}`)
-    } catch (error) {
-      console.error("Validation error:", error)
-      alert("Failed to validate product.")
-    }
-  }
+        alert(`✅ Product ${productId} validated in order ${orderId}`);
+      })
+      .catch((error) => {
+        console.error("Validation error:", error);
+        alert("Failed to validate product.");
+      });
+  };
 
   const handleReject = async (orderId, productId) => {
-    if (!window.confirm("Are you sure you want to reject this product?")) return
-    try {
-      await axios.delete(`http://localhost:5000/api/Order/${orderId}/products/${productId}/reject`)
+    if (!window.confirm("Are you sure you want to reject this product?"))
+      return;
 
-      setOrders(prevOrders =>
-        prevOrders
-          .map(order => {
-            if (order._id === orderId) {
-              const updatedProducts = order.listeProduct.filter(
-                prod => prod.productId._id !== productId
-              )
-              return { ...order, listeProduct: updatedProducts }
-            }
-            return order
-          })
-          .filter(order => order.listeProduct.length > 0)
-      )
+    rejectOrder(orderId, productId)
+      .then((res) => {
+        setOrders((prevOrders) =>
+          prevOrders
+            .map((order) => {
+              if (order._id === orderId) {
+                const updatedProducts = order.listeProduct.filter(
+                  (prod) => prod.productId._id !== productId
+                );
+                return { ...order, listeProduct: updatedProducts };
+              }
+              return order;
+            })
+            .filter((order) => order.listeProduct.length > 0)
+        );
 
-      alert(`❌ Product ${productId} rejected and removed from order ${orderId}`)
-    } catch (error) {
-      console.error("Rejection error:", error)
-      alert("Failed to reject product.")
-    }
-  }
-
-function AdminValidOrders() {
-  
-
+        alert(
+          `❌ Product ${productId} rejected and removed from order ${orderId}`
+        );
+      })
+      .catch((error) => {
+        console.error("Rejection error:", error);
+        alert("Failed to reject product.");
+      });
+  };
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">🛒 Admin - Validate Orders</h1>
@@ -86,7 +89,7 @@ function AdminValidOrders() {
         <p className="text-green-600">✅ All orders processed!</p>
       )}
 
-      {orders.map(order => (
+      {orders.map((order) => (
         <div
           key={order._id}
           className="border border-gray-300 rounded p-4 mb-6 shadow-sm"
@@ -110,7 +113,7 @@ function AdminValidOrders() {
               </tr>
             </thead>
             <tbody>
-              {order.listeProduct.map(prod => (
+              {order.listeProduct.map((prod) => (
                 <tr key={prod.productId._id} className="border-b">
                   <td className="py-2 px-2">{prod.productId.title}</td>
                   <td className="py-2 px-2">{prod.quantity}</td>
@@ -142,7 +145,7 @@ function AdminValidOrders() {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default AdminValidOrders
+export default AdminValidOrders;

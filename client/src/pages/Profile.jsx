@@ -36,8 +36,8 @@ function Profile() {
   useEffect(() => {
     getProfileApi()
       .then((res) => {
-        console.log(res);
         setProfile(res);
+        console.log(res); 
         setLoading(false);
       })
       .catch(() => {

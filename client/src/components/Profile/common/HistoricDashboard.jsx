@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import HistoricService from '../../../services/historic.service';
-
+import {Loader} from 'lucide-react';
 function HistoricDashboard({ userId = null }) {
   const [historic, setHistoric] = useState([]);
   const [analytics, setAnalytics] = useState(null);
@@ -79,7 +79,7 @@ function HistoricDashboard({ userId = null }) {
     return colors[action] || 'bg-gray-100 text-gray-800';
   };
 
-  if (loading) return <div className="flex justify-center items-center h-64">Loading historic data...</div>;
+  if (loading) return <div className='justify-center items-center'><Loader className="animate-spin" /></div>
   if (error) return <div className="text-red-500 p-4">{error}</div>;
 
   return (
