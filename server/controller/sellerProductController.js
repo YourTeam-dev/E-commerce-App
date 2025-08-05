@@ -9,7 +9,6 @@ module.exports = {
       res.status(500).send({ error: err.message });
     }
   },
-
   addProductBySeller: async function (req, res) {
     try {
       const sellerId = req.user.isSeller;
@@ -43,7 +42,6 @@ module.exports = {
       res.status(400).send({ error: err.message });
     }
   },
-
   updateProductBySeller: async function (req, res) {
     try {
       const sellerId = req.user.isSeller;
@@ -79,7 +77,6 @@ module.exports = {
       res.status(500).send({ error: err.message });
     }
   },
-
   deleteProductBySeller: async function (req, res) {
     try {
       const { productId } = req.params;
@@ -89,6 +86,7 @@ module.exports = {
       res.status(500).send({ error: err.message });
     }
   },
+  
 };
 
 

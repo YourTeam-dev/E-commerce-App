@@ -2,10 +2,12 @@ import React, { use, useState } from 'react';
 import { useEffect } from 'react';
 import { getFeaturedProduct } from '../../../API/FetchProducts';
 function FeaturedProduct() {
+  const baseUrl = process.env.REACT_APP_IMAGE_URL;
+
     const [products, setProducts] = useState([]);
     useEffect(() => {
       getFeaturedProduct().then((res) => {
-        setProducts(res.slice(0, 4));
+        setProducts(res?.slice(0, 4) );
       });
     }, []);
 
@@ -24,7 +26,7 @@ function FeaturedProduct() {
             className="bg-white shadow-lg rounded-2xl overflow-hidden transition-transform hover:scale-105"
           >
             <img
-              src={product.images[0]}
+              src={`${baseUrl}${product.images[0]}`}
               alt={product.title}
               className="w-full h-40 object-cover"
             />

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loader } from 'lucide-react';
 import useCart from '../../../hooks/useCart';
 function ListeProducts({ products }) {
+  const baseUrl = process.env.REACT_APP_IMAGE_URL;
   const navigate = useNavigate();
   const { addToCart }  = useCart();
   const handleAddToCart = (product) => {
@@ -40,7 +41,7 @@ function ListeProducts({ products }) {
               className="bg-white shadow-lg rounded-2xl overflow-hidden transition-transform hover:scale-105"
             >
               <img
-                src={product.images[0]}
+                src={`${baseUrl}${product.images[0]}`}
                 alt={product.title}
                 className="w-full h-40 object-cover"
               />

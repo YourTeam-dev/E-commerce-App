@@ -34,3 +34,36 @@ export const getFeaturedProduct = async () => {
     return null;
   }
 }
+export const getInvalidatedProducts = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}products/getInvalidatedProducts`, {headers});
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+export const validateProduct = async (id) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}products/ValidateProduct/${id}`,
+      {},
+      { headers }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error validating product:", error);
+    return null;
+  }
+}
+export const deleteProduct = async (id) => {
+  try {
+    const response = await axios.delete(
+      `${baseUrl}products/deleteProduct/${id}`,
+      { headers }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    return null;
+  }
+}

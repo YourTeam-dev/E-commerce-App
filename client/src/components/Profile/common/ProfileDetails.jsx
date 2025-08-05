@@ -10,6 +10,7 @@ function ProfileDetails({ profile }) {
     adress: profile.adress,
     phone: profile.phone,
   });
+  console.log(updateProfile);
   const userType = profile.isAdmin
     ? "Admin"
     : profile.isSeller
@@ -30,7 +31,7 @@ function ProfileDetails({ profile }) {
   return (
     <div>
       <div className="flex flex-row items-center space-x-4 ">
-        <h1 className="text-3xl font-bold text-gray-900 mr-auto">My Account</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mr-auto">{userType==="Admin"?"Hello Admin":"My Account"}</h1>
         <button onClick={() => setshowUpdate(!showpdate)} className="bg-[#d58a94] hover:bg-[#c27781] text-white font-bold py-2 px-4 rounded float-right">
           Edit
         </button>
