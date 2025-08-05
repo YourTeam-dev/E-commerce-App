@@ -12,6 +12,8 @@ const Sidebar = ({ profile }) => {
         { path: "admin/profile", label: "Profile Information" },
         { path: "admin/validate-products", label: "Validate Products" },
         { path: "admin/validate-orders", label: "Validate Orders" },
+        { path: "admin/hero-management", label: "Hero Management" },
+        { path: "admin/categories-management", label: "Categories Management" },
         { path: "admin/analytics", label: "Analytics" },
         { path: "admin/historics", label: "Historics" },
       ]

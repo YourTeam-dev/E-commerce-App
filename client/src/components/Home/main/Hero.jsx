@@ -5,6 +5,7 @@ import { getHeroSlider } from "../../../API/Hero";
 const HeroSlider = () => {
   const [slides, setSlides] = useState([]);
   const [current, setCurrent] = useState(0);
+  const baseUrl = process.env.REACT_APP_IMAGE_URL;
 
   useEffect(() => {
     getHeroSlider().then((res) => setSlides(res));
@@ -23,7 +24,7 @@ const HeroSlider = () => {
           }`}
         >
           <img
-            src={slide.image}
+            src={`${baseUrl}${slide.image}`}
             alt={slide.title}
             className="w-full h-full object-cover"
           />

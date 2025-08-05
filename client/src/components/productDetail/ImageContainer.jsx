@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const ImageContainer = ({ images }) => {
   const [current, setCurrent] = useState(0);
-
+  const baseUrl = process.env.REACT_APP_IMAGE_URL;
   const nextSlide = () => setCurrent((current + 1) % images.length);
   const prevSlide = () =>
     setCurrent((current - 1 + images.length) % images.length);
@@ -18,7 +18,7 @@ const ImageContainer = ({ images }) => {
             }`}
           >
             <img
-              src={img}
+              src={`${baseUrl}${img}`}
               alt={`Product ${index}`}
               className="w-full h-full object-cover rounded-[10px]"
             />
@@ -43,7 +43,7 @@ const ImageContainer = ({ images }) => {
         {images.map((img, index) => (
           <img
             key={index}
-            src={img}
+            src={`${baseUrl}${img}`}
             alt={`Thumbnail ${index}`}
             onClick={() => setCurrent(index)}
             className={`w-[80px] h-[80px] object-cover rounded-md cursor-pointer border-2 transition-opacity duration-300 ${

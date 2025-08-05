@@ -19,7 +19,6 @@ const isAuth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    console.error("Auth Error:", err);
     return res.status(401).send({ message: "Invalid or expired token" });
   }
 };
@@ -31,7 +30,7 @@ const isAdmin = (req, res, next) => {
     return res.status(401).send({ message: "No token provided" });
   }
   const token = authorization.startsWith("Bearer ")
-    ? authorization.slice(7, authorization.length)
+    ? authorization.slice(7)
     : authorization;
   jwt.verify(
     JSON.parse(token),
